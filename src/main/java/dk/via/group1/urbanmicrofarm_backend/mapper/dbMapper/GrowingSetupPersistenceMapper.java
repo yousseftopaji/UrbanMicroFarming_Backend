@@ -11,7 +11,6 @@ public class GrowingSetupPersistenceMapper {
     GrowingSetupEntity entity = new GrowingSetupEntity();
     entity.setSerialNumber(growingSetup.getSerialNumber());
     entity.setLocation(growingSetup.getLocation());
-    entity.setEmail(email);
     return entity;
   }
 

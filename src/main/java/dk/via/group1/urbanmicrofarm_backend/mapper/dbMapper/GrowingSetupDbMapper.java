@@ -36,7 +36,6 @@ public class GrowingSetupDbMapper {
     entity.setSetupId(domain.getSetupId());
     entity.setSerialNumber(domain.getSerialNumber());
     entity.setLocation(domain.getLocation());
-    entity.setEmail("pending-email-assignment");
 
     return entity;
   }

@@ -7,8 +7,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PredictionRepository extends JpaRepository<PredictionEntity, Long> {
-
-  List<PredictionEntity> findByPlantNameOrderByCreatedAtDesc(String plantName);
-
-  Optional<PredictionEntity> findFirstByPlantNameOrderByCreatedAtDesc(String plantName);
 }

@@ -45,7 +45,6 @@ public class SensorReadingServiceImpl implements SensorReadingService {
 
         // we will make our list of sensor readings
         List<SensorReading> readings = createSensorReadings(
-                telemetryData,
                 timestamp,
                 temperature,
                 humidity,
@@ -55,7 +54,7 @@ public class SensorReadingServiceImpl implements SensorReadingService {
 
         // we map our list of readings to db entities
         List<SensorReadingEntity> entities = readings.stream()
-                .map(reading -> sensorReadingPersistenceMapper.toEntity(telemetryData.setupId(), reading))
+                .map(reading -> sensorReadingPersistenceMapper.toEntity(reading))
                 .toList();
 
         sensorReadingRepository.saveAll(entities); // we save the readings to db
@@ -68,7 +67,6 @@ public class SensorReadingServiceImpl implements SensorReadingService {
 
     // helping method to create the list of sensor readings
     private List<SensorReading> createSensorReadings(
-            TelemetryData telemetryData,
             Instant timestamp,
             double temperature,
             double humidity,
@@ -77,17 +75,11 @@ public class SensorReadingServiceImpl implements SensorReadingService {
 
         List<SensorReading> readings = new ArrayList<>(); // we create empty list of sensor readings
 
-        // we create entity of Sensor
-        Sensor temperatureSensor = new Sensor(telemetryData.sensorId(), SensorType.TEMPERATURE, "C");
-        Sensor humiditySensor = new Sensor(telemetryData.sensorId(), SensorType.HUMIDITY, "%");
-        Sensor lightSensor = new Sensor(telemetryData.sensorId(), SensorType.LIGHT, "ADC");
-        Sensor soilMoistureSensor = new Sensor(telemetryData.sensorId(), SensorType.SOIL_MOISTURE, "ADC");
-
         // and we create and add readings to the list
-        readings.add(new SensorReading(temperatureSensor, temperature, timestamp));
-        readings.add(new SensorReading(humiditySensor, humidity, timestamp));
-        readings.add(new SensorReading(lightSensor, light, timestamp));
-        readings.add(new SensorReading(soilMoistureSensor, soilMoistureRaw, timestamp));
+        readings.add(new SensorReading(temperature, timestamp));
+        readings.add(new SensorReading(humidity, timestamp));
+        readings.add(new SensorReading(light, timestamp));
+        readings.add(new SensorReading(soilMoistureRaw, timestamp));
 
         return readings;
     }

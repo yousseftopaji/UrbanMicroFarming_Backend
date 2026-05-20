@@ -7,8 +7,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WateringEventRepository extends JpaRepository<WateringEventEntity, Long> {
-
-  List<WateringEventEntity> findByActuatorTypeOrderByStartTimeDesc(String actuatorType);
-
-  Optional<WateringEventEntity> findFirstByActuatorTypeOrderByStartTimeDesc(String actuatorType);
 }

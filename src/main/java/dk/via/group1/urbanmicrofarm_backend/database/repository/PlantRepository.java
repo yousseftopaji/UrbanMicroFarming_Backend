@@ -6,6 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PlantRepository extends JpaRepository<PlantEntity, String> {
-
-  List<PlantEntity> findBySetupId(Long setupId);
 }

@@ -25,8 +25,6 @@ public class GrowingSetupServiceImpl implements GrowingSetupService {
     GrowingSetupEntity entity = repository.findById(setupId)
         .orElseThrow(() -> new IllegalArgumentException("Growing setup not found with ID: " + setupId));
 
-    entity.setEmail(String.valueOf(userId));
-
     return dbMapper.toDomain(repository.save(entity));
   }
 
@@ -45,14 +43,12 @@ public class GrowingSetupServiceImpl implements GrowingSetupService {
     GrowingSetupEntity entity = repository.findById(setupId)
         .orElseThrow(() -> new IllegalArgumentException("Growing setup not found with ID: " + setupId));
 
-    entity.setEmail(null);
-
     repository.save(entity);
   }
 
   @Override
   public List<GrowingSetup> getSetupsForUser(int userId) {
-    return repository.findByEmail(String.valueOf(userId)).stream()
+    return repository.findByUserId(userId).stream()
         .map(dbMapper::toDomain)
         .collect(Collectors.toList());
   }

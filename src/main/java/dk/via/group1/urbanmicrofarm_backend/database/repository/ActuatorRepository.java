@@ -6,6 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ActuatorRepository extends JpaRepository<ActuatorEntity, String> {
-
-  Optional<ActuatorEntity> findBySetupId(Long setupId);
 }
