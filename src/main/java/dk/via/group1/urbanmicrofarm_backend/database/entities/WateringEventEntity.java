@@ -14,10 +14,10 @@ public class WateringEventEntity {
   private String mode;
 
   @Column(nullable = false)
-  private Long actuatorId;
+  private Long actuator_id;
 
   @ManyToOne
-  @JoinColumn(name = "actuatorId", referencedColumnName = "id", insertable = false, updatable = false)
+  @JoinColumn(name = "actuator_id", referencedColumnName = "id", insertable = false, updatable = false)
   private ActuatorEntity actuator;
 
   @OneToOne(mappedBy = "wateringEvent")
@@ -32,8 +32,8 @@ public class WateringEventEntity {
   public String getMode() { return mode; }
   public void setMode(String mode) { this.mode = mode; }
 
-  public Long getActuatorId() { return actuatorId; }
-  public void setActuatorId(Long actuatorId) { this.actuatorId = actuatorId; }
+  public Long getActuatorId() { return actuator_id; }
+  public void setActuatorId(Long actuatorId) { this.actuator_id = actuatorId; }
 
   public ActuatorEntity getActuator() { return actuator; }
   public void setActuator(ActuatorEntity actuator) { this.actuator = actuator; }

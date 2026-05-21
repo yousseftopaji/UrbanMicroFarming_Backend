@@ -10,12 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class SensorReadingPersistenceMapper {
 
-    public SensorReadingEntity toEntity(SensorReading sensorReading) {
+    public SensorReadingEntity toEntity(SensorReading sensorReading, long sensorId) {
         SensorReadingEntity entity = new SensorReadingEntity();
         entity.setValue(sensorReading.getValue());
         entity.setTimestamp(sensorReading.getTimestamp());
-        entity.setSensorId(sensorReading.getId());
-
+        entity.setSensorId(sensorId);
         return entity;
     }
 
@@ -23,7 +22,8 @@ public class SensorReadingPersistenceMapper {
         return new SensorReading(
                 entity.getId(),
                 entity.getValue(),
-                entity.getTimestamp()
+                entity.getTimestamp(),
+                entity.getSensorId()
         );
     }
 }

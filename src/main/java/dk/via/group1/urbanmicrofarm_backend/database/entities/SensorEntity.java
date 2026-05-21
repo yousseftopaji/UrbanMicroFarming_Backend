@@ -14,17 +14,17 @@ public class SensorEntity {
   private String unit;
 
   @Column(nullable = false)
-  private String setupId;
+  private int setup_id;
 
   @ManyToOne
-  @JoinColumn(name = "setupId", referencedColumnName = "setupId", insertable = false, updatable = false)
+  @JoinColumn(name = "setup_id", referencedColumnName = "setup_id", insertable = false, updatable = false)
   private GrowingSetupEntity growingSetup;
 
   @Column(nullable = false)
-  private String sensorTypeName;
+  private String sensor_type_name;
 
   @ManyToOne
-  @JoinColumn(name = "sensorTypeName", referencedColumnName = "name", insertable = false, updatable = false)
+  @JoinColumn(name = "sensor_type_name", referencedColumnName = "name", insertable = false, updatable = false)
   private SensorTypeEntity sensorType;
 
   @OneToMany(mappedBy = "sensor")
@@ -36,14 +36,14 @@ public class SensorEntity {
   public String getUnit() { return unit; }
   public void setUnit(String unit) { this.unit = unit; }
 
-  public String getSetupId() { return setupId; }
-  public void setSetupId(String setupId) { this.setupId = setupId; }
+  public int getSetupId() { return setup_id; }
+  public void setSetupId(int setupId) { this.setup_id = setupId; }
 
   public GrowingSetupEntity getGrowingSetup() { return growingSetup; }
   public void setGrowingSetup(GrowingSetupEntity growingSetup) { this.growingSetup = growingSetup; }
 
-  public String getSensorTypeName() { return sensorTypeName; }
-  public void setSensorTypeName(String sensorTypeName) { this.sensorTypeName = sensorTypeName; }
+  public String getSensorTypeName() { return sensor_type_name; }
+  public void setSensorTypeName(String sensorTypeName) { this.sensor_type_name = sensorTypeName; }
 
   public SensorTypeEntity getSensorType() { return sensorType; }
   public void setSensorType(SensorTypeEntity sensorType) { this.sensorType = sensorType; }

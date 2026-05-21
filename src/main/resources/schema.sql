@@ -1,0 +1,1 @@
+CREATE SCHEMA IF NOT EXISTS urban_micro_farm_app;

@@ -17,10 +17,10 @@ public class ThresholdEntity {
   private Double value;
 
   @Column(nullable = false)
-  private Long plantId;
+  private Long plant_id;
 
   @OneToOne
-  @JoinColumn(name = "plantId", referencedColumnName = "id", insertable = false, updatable = false)
+  @JoinColumn(name = "plant_id", referencedColumnName = "id", insertable = false, updatable = false)
   private PlantEntity plant;
 
   public Long getId() { return id; }
@@ -32,8 +32,8 @@ public class ThresholdEntity {
   public Double getValue() { return value; }
   public void setValue(Double value) { this.value = value; }
 
-  public Long getPlantId() { return plantId; }
-  public void setPlantId(Long plantId) { this.plantId = plantId; }
+  public Long getPlantId() { return plant_id; }
+  public void setPlantId(Long plantId) { this.plant_id = plantId; }
 
   public PlantEntity getPlant() { return plant; }
   public void setPlant(PlantEntity plant) { this.plant = plant; }

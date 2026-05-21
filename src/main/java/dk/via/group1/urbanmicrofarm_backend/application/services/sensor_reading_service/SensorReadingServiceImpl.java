@@ -42,6 +42,7 @@ public class SensorReadingServiceImpl implements SensorReadingService {
         double humidity = telemetryData.humidity() / 10.0;
         int light = telemetryData.light();
         int soilMoistureRaw = telemetryData.soilMoisture();
+        long sensorId = telemetryData.sensorId();
 
         // we will make our list of sensor readings
         List<SensorReading> readings = createSensorReadings(
@@ -52,13 +53,13 @@ public class SensorReadingServiceImpl implements SensorReadingService {
                 soilMoistureRaw
         );
 
+        //
         // we map our list of readings to db entities
         List<SensorReadingEntity> entities = readings.stream()
-                .map(reading -> sensorReadingPersistenceMapper.toEntity(reading))
+                .map(reading -> sensorReadingPersistenceMapper.toEntity(reading, sensorId))
                 .toList();
 
         sensorReadingRepository.saveAll(entities); // we save the readings to db
-
 
         // after saving the readings, we check if watering is needed
         // this will call ML prediction and publish MQTT command if soil is too dry
@@ -76,10 +77,10 @@ public class SensorReadingServiceImpl implements SensorReadingService {
         List<SensorReading> readings = new ArrayList<>(); // we create empty list of sensor readings
 
         // and we create and add readings to the list
-        readings.add(new SensorReading(temperature, timestamp));
-        readings.add(new SensorReading(humidity, timestamp));
-        readings.add(new SensorReading(light, timestamp));
-        readings.add(new SensorReading(soilMoistureRaw, timestamp));
+        readings.add(new SensorReading(temperature, timestamp, 1));
+        readings.add(new SensorReading(humidity, timestamp, 4));
+        readings.add(new SensorReading(light, timestamp, 2));
+        readings.add(new SensorReading(soilMoistureRaw, timestamp, 3));
 
         return readings;
     }
