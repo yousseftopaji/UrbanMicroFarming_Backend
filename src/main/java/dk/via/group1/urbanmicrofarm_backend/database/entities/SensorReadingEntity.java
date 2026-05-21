@@ -18,10 +18,10 @@ public class SensorReadingEntity {
   private Instant timestamp;
 
   @Column(nullable = false)
-  private Long sensorId;
+  private Long sensor_id;
 
   @ManyToOne
-  @JoinColumn(name = "sensorId", referencedColumnName = "id", insertable = false, updatable = false)
+  @JoinColumn(name = "sensor_id", referencedColumnName = "id", insertable = false, updatable = false)
   private SensorEntity sensor;
 
   @OneToOne(mappedBy = "sensorReading")
@@ -37,8 +37,8 @@ public class SensorReadingEntity {
   public Instant getTimestamp() { return timestamp; }
   public void setTimestamp(Instant timestamp) { this.timestamp = timestamp; }
 
-  public Long getSensorId() { return sensorId; }
-  public void setSensorId(Long sensorId) { this.sensorId = sensorId; }
+  public Long getSensorId() { return sensor_id; }
+  public void setSensorId(Long sensorId) { this.sensor_id = sensorId; }
 
   public SensorEntity getSensor() { return sensor; }
   public void setSensor(SensorEntity sensor) { this.sensor = sensor; }

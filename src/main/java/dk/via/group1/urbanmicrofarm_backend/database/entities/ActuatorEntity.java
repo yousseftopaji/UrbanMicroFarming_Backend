@@ -19,10 +19,10 @@ public class ActuatorEntity {
   private String status;
 
   @Column(nullable = false)
-  private String setupId;
+  private int setup_id;
 
   @ManyToOne
-  @JoinColumn(name = "setupId", referencedColumnName = "setupId", insertable = false, updatable = false)
+  @JoinColumn(name = "setup_id", referencedColumnName = "setup_id", insertable = false, updatable = false)
   private GrowingSetupEntity growingSetup;
 
   @OneToMany(mappedBy = "actuator")
@@ -37,8 +37,8 @@ public class ActuatorEntity {
   public String getStatus() { return status; }
   public void setStatus(String status) { this.status = status; }
 
-  public String getSetupId() { return setupId; }
-  public void setSetupId(String setupId) { this.setupId = setupId; }
+  public int getSetupId() { return setup_id; }
+  public void setSetupId(int setupId) { this.setup_id = setupId; }
 
   public GrowingSetupEntity getGrowingSetup() { return growingSetup; }
   public void setGrowingSetup(GrowingSetupEntity growingSetup) { this.growingSetup = growingSetup; }

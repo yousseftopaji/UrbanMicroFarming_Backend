@@ -19,10 +19,12 @@ public class PlantEntity {
   private String type;
   private Instant datePlanted;
   private String status;
-  private Long sensorId;
+
+  @Column(nullable = false)
+  private Long sensor_id;
 
   @OneToOne
-  @JoinColumn(name = "sensorId", referencedColumnName = "id", insertable = false, updatable = false)
+  @JoinColumn(name = "sensor_id", referencedColumnName = "id", insertable = false, updatable = false)
   private SensorEntity sensor;
 
   @OneToMany(mappedBy = "plant")
@@ -49,8 +51,8 @@ public class PlantEntity {
   public String getStatus() { return status; }
   public void setStatus(String status) { this.status = status; }
 
-  public Long getSensorId() { return sensorId; }
-  public void setSensorId(Long sensorId) { this.sensorId = sensorId; }
+  public Long getSensorId() { return sensor_id; }
+  public void setSensorId(Long sensorId) { this.sensor_id = sensorId; }
 
   public SensorEntity getSensor() { return sensor; }
   public void setSensor(SensorEntity sensor) { this.sensor = sensor; }

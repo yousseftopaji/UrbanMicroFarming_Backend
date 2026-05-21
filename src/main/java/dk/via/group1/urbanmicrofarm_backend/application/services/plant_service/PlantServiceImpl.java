@@ -20,7 +20,7 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<PlantEntity> getPlantsBySetup(Long setupId) {
-        return plantRepository.findBySetupId(setupId);
+       return null;
     }
 
     @Override

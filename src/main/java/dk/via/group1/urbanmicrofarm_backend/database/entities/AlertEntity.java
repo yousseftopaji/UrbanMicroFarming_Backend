@@ -28,10 +28,10 @@ public class AlertEntity {
   private SensorReadingEntity sensorReading;
 
   @Column(nullable = true)
-  private Long wateringEventId;
+  private Long watering_event_id;
 
   @OneToOne
-  @JoinColumn(name = "wateringEventId", referencedColumnName = "id", insertable = false, updatable = false)
+  @JoinColumn(name = "watering_event_id", referencedColumnName = "id", insertable = false, updatable = false)
   private WateringEventEntity wateringEvent;
 
   public Long getId() { return id; }
@@ -55,8 +55,8 @@ public class AlertEntity {
   public SensorReadingEntity getSensorReading() { return sensorReading; }
   public void setSensorReading(SensorReadingEntity sensorReading) { this.sensorReading = sensorReading; }
 
-  public Long getWateringEventId() { return wateringEventId; }
-  public void setWateringEventId(Long wateringEventId) { this.wateringEventId = wateringEventId; }
+  public Long getWateringEventId() { return watering_event_id; }
+  public void setWateringEventId(Long wateringEventId) { this.watering_event_id = wateringEventId; }
 
   public WateringEventEntity getWateringEvent() { return wateringEvent; }
   public void setWateringEvent(WateringEventEntity wateringEvent) { this.wateringEvent = wateringEvent; }

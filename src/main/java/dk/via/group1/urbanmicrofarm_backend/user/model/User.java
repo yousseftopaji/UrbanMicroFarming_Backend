@@ -3,8 +3,8 @@ package dk.via.group1.urbanmicrofarm_backend.user.model;
 import jakarta.persistence.*;
 import java.time.Instant;
 
-@Entity
-@Table(name = "users")
+//@Entity
+//@Table(name = "users")
 public class User {
 
     @Id

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SensorPersistenceMapper {
 
-  public SensorEntity toEntity(Long setupId, Sensor sensor) {
+  public SensorEntity toEntity(int setupId, Sensor sensor) {
     SensorEntity entity = new SensorEntity();
-    entity.setSetupId(String.valueOf(setupId));
+    entity.setSetupId(setupId);
     entity.setUnit(sensor.getUnit());
     entity.setSensorTypeName(sensor.getType().name());
     return entity;
