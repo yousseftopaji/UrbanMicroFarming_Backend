@@ -8,19 +8,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class SensorPersistenceMapper {
 
-  public SensorEntity toEntity(Long setupId, Sensor sensor) {
-    SensorEntity entity = new SensorEntity();
-    entity.setSetupId(setupId);
-    entity.setUnit(sensor.getUnit());
-    entity.setSensorTypeName(sensor.getType().name());
-    return entity;
-  }
+    public SensorEntity toEntity(int setupId, Sensor sensor) {
+        SensorEntity entity = new SensorEntity();
+        entity.setSetupId(setupId);
+        entity.setUnit(sensor.getUnit());
+        entity.setSensorTypeName(sensor.getType().name());
+        return entity;
+    }
 
-  public Sensor toDomain(SensorEntity entity) {
-    return new Sensor(
-        entity.getSensorId().intValue(),
-        SensorType.valueOf(entity.getSensorTypeName()),
-        entity.getUnit()
-    );
-  }
+    public Sensor toDomain(SensorEntity entity) {
+        return new Sensor(
+                entity.getId().intValue(),
+                SensorType.valueOf(entity.getSensorTypeName()),
+                entity.getUnit()
+        );
+    }
 }

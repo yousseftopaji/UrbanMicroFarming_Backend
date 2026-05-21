@@ -12,48 +12,44 @@ import java.util.stream.Collectors;
 @Service
 public class GrowingSetupServiceImpl implements GrowingSetupService {
 
-  private final GrowingSetupRepository repository;
-  private final GrowingSetupDbMapper dbMapper;
+    private final GrowingSetupRepository repository;
+    private final GrowingSetupDbMapper dbMapper;
 
-  public GrowingSetupServiceImpl(GrowingSetupRepository repository, GrowingSetupDbMapper dbMapper) {
-    this.repository = repository;
-    this.dbMapper = dbMapper;
-  }
+    public GrowingSetupServiceImpl(GrowingSetupRepository repository, GrowingSetupDbMapper dbMapper) {
+        this.repository = repository;
+        this.dbMapper = dbMapper;
+    }
 
-  @Override
-  public GrowingSetup assignSetupToUser(int userId, int setupId) {
-    GrowingSetupEntity entity = repository.findById(setupId)
-        .orElseThrow(() -> new IllegalArgumentException("Growing setup not found with ID: " + setupId));
+    @Override
+    public GrowingSetup assignSetupToUser(int userId, int setupId) {
+        GrowingSetupEntity entity = repository.findById(setupId)
+                .orElseThrow(() -> new IllegalArgumentException("Growing setup not found with ID: " + setupId));
 
-    entity.setEmail(String.valueOf(userId));
+        return dbMapper.toDomain(repository.save(entity));
+    }
 
-    return dbMapper.toDomain(repository.save(entity));
-  }
+    @Override
+    public GrowingSetup updateSetupLocation(int setupId, String location) {
+        GrowingSetupEntity entity = repository.findById(setupId)
+                .orElseThrow(() -> new IllegalArgumentException("Growing setup not found with ID: " + setupId));
 
-  @Override
-  public GrowingSetup updateSetupLocation(int setupId, String location) {
-    GrowingSetupEntity entity = repository.findById(setupId)
-        .orElseThrow(() -> new IllegalArgumentException("Growing setup not found with ID: " + setupId));
+        entity.setLocation(location);
 
-    entity.setLocation(location);
+        return dbMapper.toDomain(repository.save(entity));
+    }
 
-    return dbMapper.toDomain(repository.save(entity));
-  }
+    @Override
+    public void disconnectSetup(int setupId) {
+        GrowingSetupEntity entity = repository.findById(setupId)
+                .orElseThrow(() -> new IllegalArgumentException("Growing setup not found with ID: " + setupId));
 
-  @Override
-  public void disconnectSetup(int setupId) {
-    GrowingSetupEntity entity = repository.findById(setupId)
-        .orElseThrow(() -> new IllegalArgumentException("Growing setup not found with ID: " + setupId));
+        repository.save(entity);
+    }
 
-    entity.setEmail(null);
-
-    repository.save(entity);
-  }
-
-  @Override
-  public List<GrowingSetup> getSetupsForUser(int userId) {
-    return repository.findByEmail(String.valueOf(userId)).stream()
-        .map(dbMapper::toDomain)
-        .collect(Collectors.toList());
-  }
+    @Override
+    public List<GrowingSetup> getSetupsForUser(int userId) {
+        return repository.findByUserId((long) userId).stream()
+                .map(dbMapper::toDomain)
+                .collect(Collectors.toList());
+    }
 }

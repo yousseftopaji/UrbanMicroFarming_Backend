@@ -5,17 +5,14 @@ import dk.via.group1.urbanmicrofarm_backend.dto.SensorReadingHistoryResponseDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.SensorReadingLatestResponseDto;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneOffset;
 import java.util.List;
 
 @Component
 public class SensorReadingApiMapper {
 
-    public SensorReadingLatestResponseDto toLatestResponseDto(
-            SensorReading sensorReading) {
-
+    public SensorReadingLatestResponseDto toLatestResponseDto(SensorReading sensorReading) {
         return new SensorReadingLatestResponseDto(
-                sensorReading.getSensor().getSensorId(),
+                (int) sensorReading.getId(),
                 sensorReading.getValue(),
                 sensorReading.getTimestamp()
         );

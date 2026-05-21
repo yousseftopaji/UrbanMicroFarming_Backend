@@ -7,40 +7,57 @@ import java.time.Instant;
 @Table(name = "alert", schema = "urban_micro_farm_app")
 public class AlertEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long alertId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(nullable = false)
-  private String type;
+    @Column(nullable = false)
+    private String type;
 
-  private String message;
-  private String status;
+    private String message;
+    private String status;
 
-  @Column(nullable = false)
-  private Instant timestamp;
+    @Column(nullable = false)
+    private Instant timestamp;
 
-  private Long sensorReadingId;
-  private Instant wateringEventStartTime;
+    @Column(nullable = true)
+    private Long sensorReadingId;
 
-  public Long getAlertId() { return alertId; }
-  public void setAlertId(Long alertId) { this.alertId = alertId; }
+    @OneToOne
+    @JoinColumn(name = "sensorReadingId", referencedColumnName = "id", insertable = false, updatable = false)
+    private SensorReadingEntity sensorReading;
 
-  public String getType() { return type; }
-  public void setType(String type) { this.type = type; }
+    @Column(nullable = true)
+    private Long watering_event_id;
 
-  public String getMessage() { return message; }
-  public void setMessage(String message) { this.message = message; }
+    @OneToOne
+    @JoinColumn(name = "watering_event_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private WateringEventEntity wateringEvent;
 
-  public String getStatus() { return status; }
-  public void setStatus(String status) { this.status = status; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-  public Instant getTimestamp() { return timestamp; }
-  public void setTimestamp(Instant timestamp) { this.timestamp = timestamp; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
-  public Long getSensorReadingId() { return sensorReadingId; }
-  public void setSensorReadingId(Long sensorReadingId) { this.sensorReadingId = sensorReadingId; }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 
-  public Instant getWateringEventStartTime() { return wateringEventStartTime; }
-  public void setWateringEventStartTime(Instant wateringEventStartTime) { this.wateringEventStartTime = wateringEventStartTime; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public Instant getTimestamp() { return timestamp; }
+    public void setTimestamp(Instant timestamp) { this.timestamp = timestamp; }
+
+    public Long getSensorReadingId() { return sensorReadingId; }
+    public void setSensorReadingId(Long sensorReadingId) { this.sensorReadingId = sensorReadingId; }
+
+    public SensorReadingEntity getSensorReading() { return sensorReading; }
+    public void setSensorReading(SensorReadingEntity sensorReading) { this.sensorReading = sensorReading; }
+
+    public Long getWateringEventId() { return watering_event_id; }
+    public void setWateringEventId(Long wateringEventId) { this.watering_event_id = wateringEventId; }
+
+    public WateringEventEntity getWateringEvent() { return wateringEvent; }
+    public void setWateringEvent(WateringEventEntity wateringEvent) { this.wateringEvent = wateringEvent; }
 }

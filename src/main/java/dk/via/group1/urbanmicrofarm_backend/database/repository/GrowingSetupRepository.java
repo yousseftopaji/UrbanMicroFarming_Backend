@@ -6,6 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface GrowingSetupRepository extends JpaRepository<GrowingSetupEntity, Integer> {
-
-  List<GrowingSetupEntity> findByEmail(String email);
+    List<GrowingSetupEntity> findByUserId(Long userId);
 }

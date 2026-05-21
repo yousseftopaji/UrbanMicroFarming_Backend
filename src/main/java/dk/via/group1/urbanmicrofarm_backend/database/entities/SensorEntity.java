@@ -6,28 +6,45 @@ import jakarta.persistence.*;
 @Table(name = "sensor", schema = "urban_micro_farm_app")
 public class SensorEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long sensorId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(nullable = false)
-  private String unit;
+    @Column(nullable = false)
+    private String unit;
 
-  @Column(nullable = false)
-  private Long setupId;
+    @Column(nullable = false)
+    private int setup_id;
 
-  @Column(nullable = false)
-  private String sensorTypeName;
+    @ManyToOne
+    @JoinColumn(name = "setup_id", referencedColumnName = "setup_id", insertable = false, updatable = false)
+    private GrowingSetupEntity growingSetup;
 
-  public Long getSensorId() { return sensorId; }
-  public void setSensorId(Long sensorId) { this.sensorId = sensorId; }
+    @Column(nullable = false)
+    private String sensor_type_name;
 
-  public String getUnit() { return unit; }
-  public void setUnit(String unit) { this.unit = unit; }
+    @ManyToOne
+    @JoinColumn(name = "sensor_type_name", referencedColumnName = "name", insertable = false, updatable = false)
+    private SensorTypeEntity sensorType;
 
-  public Long getSetupId() { return setupId; }
-  public void setSetupId(Long setupId) { this.setupId = setupId; }
+    @OneToMany(mappedBy = "sensor")
+    private java.util.List<SensorReadingEntity> sensorReadings;
 
-  public String getSensorTypeName() { return sensorTypeName; }
-  public void setSensorTypeName(String sensorTypeName) { this.sensorTypeName = sensorTypeName; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getUnit() { return unit; }
+    public void setUnit(String unit) { this.unit = unit; }
+
+    public int getSetupId() { return setup_id; }
+    public void setSetupId(int setupId) { this.setup_id = setupId; }
+
+    public GrowingSetupEntity getGrowingSetup() { return growingSetup; }
+    public void setGrowingSetup(GrowingSetupEntity growingSetup) { this.growingSetup = growingSetup; }
+
+    public String getSensorTypeName() { return sensor_type_name; }
+    public void setSensorTypeName(String sensorTypeName) { this.sensor_type_name = sensorTypeName; }
+
+    public SensorTypeEntity getSensorType() { return sensorType; }
+    public void setSensorType(SensorTypeEntity sensorType) { this.sensorType = sensorType; }
 }

@@ -7,35 +7,35 @@ import java.time.Instant;
 @Table(name = "prediction", schema = "urban_micro_farm_app")
 public class PredictionEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long predictionId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(nullable = false)
-  private Double predictedValue;
+    @Column(nullable = false)
+    private Double predictedValue;
 
-  private Instant startDate;
-  private Instant endDate;
-  private Instant createdAt;
+    @Column(nullable = false)
+    private Instant createdAt;
 
-  @Column(nullable = false)
-  private String plantName;
+    @Column(nullable = false)
+    private Long plant_id;
 
-  public Long getPredictionId() { return predictionId; }
-  public void setPredictionId(Long predictionId) { this.predictionId = predictionId; }
+    @ManyToOne
+    @JoinColumn(name = "plant_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private PlantEntity plant;
 
-  public Double getPredictedValue() { return predictedValue; }
-  public void setPredictedValue(Double predictedValue) { this.predictedValue = predictedValue; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-  public Instant getStartDate() { return startDate; }
-  public void setStartDate(Instant startDate) { this.startDate = startDate; }
+    public Double getPredictedValue() { return predictedValue; }
+    public void setPredictedValue(Double predictedValue) { this.predictedValue = predictedValue; }
 
-  public Instant getEndDate() { return endDate; }
-  public void setEndDate(Instant endDate) { this.endDate = endDate; }
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 
-  public Instant getCreatedAt() { return createdAt; }
-  public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+    public Long getPlantId() { return plant_id; }
+    public void setPlantId(Long plantId) { this.plant_id = plantId; }
 
-  public String getPlantName() { return plantName; }
-  public void setPlantName(String plantName) { this.plantName = plantName; }
+    public PlantEntity getPlant() { return plant; }
+    public void setPlant(PlantEntity plant) { this.plant = plant; }
 }

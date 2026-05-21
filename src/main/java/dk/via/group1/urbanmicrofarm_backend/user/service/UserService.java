@@ -1,11 +1,11 @@
 package dk.via.group1.urbanmicrofarm_backend.user.service;
 
+import dk.via.group1.urbanmicrofarm_backend.database.entities.UserEntity;
+import dk.via.group1.urbanmicrofarm_backend.database.repository.UserRepository;
 import dk.via.group1.urbanmicrofarm_backend.security.JwtService;
 import dk.via.group1.urbanmicrofarm_backend.user.dto.*;
 import dk.via.group1.urbanmicrofarm_backend.user.exception.*;
 import dk.via.group1.urbanmicrofarm_backend.user.mapper.UserMapper;
-import dk.via.group1.urbanmicrofarm_backend.user.model.User;
-import dk.via.group1.urbanmicrofarm_backend.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,11 +39,11 @@ public class UserService {
     }
 
     public LoginResponse login(LoginRequest request) {
-        User user = userRepository.findByEmail(request.email())
-            .orElseThrow(() -> {
-                log.warn("Login failed - email not found: {}", request.email());
-                return new InvalidCredentialsException("Invalid email or password");
-            });
+        UserEntity user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> {
+                    log.warn("Login failed - email not found: {}", request.email());
+                    return new InvalidCredentialsException("Invalid email or password");
+                });
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
             log.warn("Login failed - wrong password: userId={}", user.getId());
@@ -57,8 +57,8 @@ public class UserService {
 
     public MessageResponse deleteUser(Long userId, Long authenticatedUserId) {
         checkOwnership(userId, authenticatedUserId);
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
         userRepository.delete(user);
         log.info("Account deleted: userId={}", userId);
         return new MessageResponse("Account deleted successfully");
@@ -66,16 +66,16 @@ public class UserService {
 
     public UserDto updateName(Long userId, Long authenticatedUserId, UpdateNameRequest request) {
         checkOwnership(userId, authenticatedUserId);
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
         user.setName(request.name());
         return userMapper.toNameDto(userRepository.save(user));
     }
 
     public MessageResponse changePassword(Long userId, Long authenticatedUserId, ChangePasswordRequest request) {
         checkOwnership(userId, authenticatedUserId);
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
 
         if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
             log.warn("Password change failed - wrong current password: userId={}", userId);
@@ -90,8 +90,8 @@ public class UserService {
 
     public UserDto changeEmail(Long userId, Long authenticatedUserId, ChangeEmailRequest request) {
         checkOwnership(userId, authenticatedUserId);
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
 
         if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
             log.warn("Email change failed - wrong current password: userId={}", userId);
@@ -109,8 +109,8 @@ public class UserService {
 
     public UserDto setTheme(Long userId, Long authenticatedUserId, SetThemeRequest request) {
         checkOwnership(userId, authenticatedUserId);
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
         user.setTheme(request.theme());
         return userMapper.toThemeDto(userRepository.save(user));
     }
@@ -118,7 +118,7 @@ public class UserService {
     private void checkOwnership(Long userId, Long authenticatedUserId) {
         if (!userId.equals(authenticatedUserId)) {
             throw new UnauthorizedOperationException(
-                "Cannot perform operation on another user's account");
+                    "Cannot perform operation on another user's account");
         }
     }
 }
