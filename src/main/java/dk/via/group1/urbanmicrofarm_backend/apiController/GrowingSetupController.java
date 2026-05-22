@@ -48,7 +48,7 @@ public class GrowingSetupController {
   @PostMapping
   @ResponseStatus(HttpStatus.OK)
   public GrowingSetupResponseDto assignSetupToUser(@RequestBody GrowingSetupAssignDto request) {
-    GrowingSetup assigned = service.assignSetupToUser(request.getUserId(), request.getSetupId());
+    GrowingSetup assigned = service.assignSetupToUser(request.getUserId(), request.getSerialNumber());
     return apiMapper.toResponseDto(assigned);
   }
 

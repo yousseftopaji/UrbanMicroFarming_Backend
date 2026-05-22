@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface GrowingSetupService {
 
-  GrowingSetup assignSetupToUser(int userId, int setupId);
+  GrowingSetup assignSetupToUser(int userId, String serialNumber);
 
   GrowingSetup updateSetupLocation(int setupId, String location);
 

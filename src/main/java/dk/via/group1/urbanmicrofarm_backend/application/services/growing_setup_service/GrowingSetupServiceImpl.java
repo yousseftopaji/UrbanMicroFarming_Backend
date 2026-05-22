@@ -25,9 +25,12 @@ public class GrowingSetupServiceImpl implements GrowingSetupService {
     }
 
     @Override
-    public GrowingSetup assignSetupToUser(int userId, int setupId) {
-        GrowingSetupEntity entity = repository.findById(setupId)
-                .orElseThrow(() -> new IllegalArgumentException("Growing setup not found with ID: " + setupId));
+    public GrowingSetup assignSetupToUser(int userId, String serialNumber) {
+        GrowingSetupEntity entity = repository.findBySerialNumber(serialNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Growing setup not found with ID: " + serialNumber));
+
+        if(entity.getUserId() != null && entity.getUserId() != userId)
+            throw new IllegalArgumentException("Setup is already assigned to other user " + serialNumber);
 
         entity.setUser(userRepository.getReferenceById((long) userId));
         return dbMapper.toDomain(repository.save(entity));
