@@ -1,12 +1,12 @@
 package dk.via.group1.urbanmicrofarm_backend.user.service;
 
+import dk.via.group1.urbanmicrofarm_backend.database.entities.UserEntity;
+import dk.via.group1.urbanmicrofarm_backend.database.repository.UserRepository;
 import dk.via.group1.urbanmicrofarm_backend.security.JwtService;
 import dk.via.group1.urbanmicrofarm_backend.user.dto.*;
 import dk.via.group1.urbanmicrofarm_backend.user.exception.*;
 import dk.via.group1.urbanmicrofarm_backend.user.mapper.UserMapper;
 import dk.via.group1.urbanmicrofarm_backend.user.model.Theme;
-import dk.via.group1.urbanmicrofarm_backend.user.model.User;
-import dk.via.group1.urbanmicrofarm_backend.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,12 +37,12 @@ class UserServiceTest {
     void register_success_returnsMessage() {
         var req = new RegisterRequest("Alice", "alice@example.com", "password123");
         when(userRepository.existsByEmail("alice@example.com")).thenReturn(false);
-        when(userMapper.toEntity(req)).thenReturn(new User());
+        when(userMapper.toEntity(req)).thenReturn(new UserEntity());
 
         MessageResponse response = userService.register(req);
 
         assertThat(response.message()).isEqualTo("User registered successfully");
-        verify(userRepository).save(any(User.class));
+        verify(userRepository).save(any(UserEntity.class));
     }
 
     @Test
@@ -60,7 +60,7 @@ class UserServiceTest {
     @Test
     void login_success_returnsTokenAndUser() {
         var req = new LoginRequest("alice@example.com", "password123");
-        User user = buildUser(1L, "alice@example.com", "hash");
+        UserEntity user = buildUser(1L, "alice@example.com", "hash");
         var loginDto = new UserDto(1L, null, "alice@example.com", "system");
 
         when(userRepository.findByEmail("alice@example.com")).thenReturn(Optional.of(user));
@@ -84,7 +84,7 @@ class UserServiceTest {
 
     @Test
     void login_wrongPassword_throws() {
-        User user = buildUser(1L, "alice@example.com", "hash");
+        UserEntity user = buildUser(1L, "alice@example.com", "hash");
         when(userRepository.findByEmail("alice@example.com")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("wrong", "hash")).thenReturn(false);
 
@@ -96,7 +96,7 @@ class UserServiceTest {
 
     @Test
     void deleteUser_success_returnsMessage() {
-        User user = buildUser(1L, "alice@example.com", "hash");
+        UserEntity user = buildUser(1L, "alice@example.com", "hash");
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         MessageResponse response = userService.deleteUser(1L, 1L);
@@ -123,7 +123,7 @@ class UserServiceTest {
 
     @Test
     void updateName_success_returnsDto() {
-        User user = buildUser(1L, "alice@example.com", "hash");
+        UserEntity user = buildUser(1L, "alice@example.com", "hash");
         var nameDto = new UserDto(1L, "New Name", "alice@example.com", null);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
@@ -153,7 +153,7 @@ class UserServiceTest {
 
     @Test
     void changePassword_success_returnsMessage() {
-        User user = buildUser(1L, "alice@example.com", "oldHash");
+        UserEntity user = buildUser(1L, "alice@example.com", "oldHash");
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("oldPass", "oldHash")).thenReturn(true);
         when(passwordEncoder.encode("newPass123")).thenReturn("newHash");
@@ -168,7 +168,7 @@ class UserServiceTest {
 
     @Test
     void changePassword_wrongCurrent_throws() {
-        User user = buildUser(1L, "alice@example.com", "hash");
+        UserEntity user = buildUser(1L, "alice@example.com", "hash");
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("wrong", "hash")).thenReturn(false);
 
@@ -197,7 +197,7 @@ class UserServiceTest {
 
     @Test
     void changeEmail_success_returnsDto() {
-        User user = buildUser(1L, "alice@example.com", "hash");
+        UserEntity user = buildUser(1L, "alice@example.com", "hash");
         var emailDto = new UserDto(1L, null, "new@example.com", null);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("pass", "hash")).thenReturn(true);
@@ -213,7 +213,7 @@ class UserServiceTest {
 
     @Test
     void changeEmail_wrongPassword_throws() {
-        User user = buildUser(1L, "alice@example.com", "hash");
+        UserEntity user = buildUser(1L, "alice@example.com", "hash");
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("wrong", "hash")).thenReturn(false);
 
@@ -224,7 +224,7 @@ class UserServiceTest {
 
     @Test
     void changeEmail_newEmailTaken_throws() {
-        User user = buildUser(1L, "alice@example.com", "hash");
+        UserEntity user = buildUser(1L, "alice@example.com", "hash");
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("pass", "hash")).thenReturn(true);
         when(userRepository.existsByEmail("taken@example.com")).thenReturn(true);
@@ -254,7 +254,7 @@ class UserServiceTest {
 
     @Test
     void setTheme_success_returnsDto() {
-        User user = buildUser(1L, "alice@example.com", "hash");
+        UserEntity user = buildUser(1L, "alice@example.com", "hash");
         var themeDto = new UserDto(1L, null, "alice@example.com", "dark");
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
@@ -280,8 +280,8 @@ class UserServiceTest {
             .isInstanceOf(UnauthorizedOperationException.class);
     }
 
-    private User buildUser(Long id, String email, String hash) {
-        User user = new User();
+    private UserEntity buildUser(Long id, String email, String hash) {
+        UserEntity user = new UserEntity();
         user.setId(id);
         user.setEmail(email);
         user.setPasswordHash(hash);

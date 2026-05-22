@@ -1,9 +1,6 @@
 package dk.via.group1.urbanmicrofarm_backend.mapper.dbMapper;
 
-
-import dk.via.group1.urbanmicrofarm_backend.application.domain.Sensor;
 import dk.via.group1.urbanmicrofarm_backend.application.domain.SensorReading;
-import dk.via.group1.urbanmicrofarm_backend.application.domain.SensorType;
 import dk.via.group1.urbanmicrofarm_backend.database.entities.SensorReadingEntity;
 import org.springframework.stereotype.Component;
 

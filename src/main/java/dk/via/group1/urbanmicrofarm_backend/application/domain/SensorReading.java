@@ -46,5 +46,3 @@ public class SensorReading
     return sensorId;
   }
 }
-
-

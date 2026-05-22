@@ -1,15 +1,12 @@
 package dk.via.group1.urbanmicrofarm_backend.application.services.sensor_reading_service;
 
-import dk.via.group1.urbanmicrofarm_backend.application.domain.Sensor;
 import dk.via.group1.urbanmicrofarm_backend.application.domain.SensorReading;
-import dk.via.group1.urbanmicrofarm_backend.application.domain.SensorType;
 import dk.via.group1.urbanmicrofarm_backend.application.services.watering.WateringAutomationService;
 import dk.via.group1.urbanmicrofarm_backend.database.entities.SensorReadingEntity;
 import dk.via.group1.urbanmicrofarm_backend.database.repository.SensorReadingRepository;
 import dk.via.group1.urbanmicrofarm_backend.dto.TelemetryData;
 import dk.via.group1.urbanmicrofarm_backend.mapper.dbMapper.SensorReadingPersistenceMapper;
 import org.springframework.stereotype.Service;
-
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -33,39 +30,26 @@ public class SensorReadingServiceImpl implements SensorReadingService {
 
     @Override
     public void processReadings(TelemetryData telemetryData) {
-        validate(telemetryData); // we check the data first
+        validate(telemetryData);
 
-        Instant timestamp = Instant.now(); // we make timestamp of time now
+        Instant timestamp = Instant.now();
 
-        // we get the values from telemetryData and we convert it
         double temperature = telemetryData.temperature() / 10.0;
         double humidity = telemetryData.humidity() / 10.0;
         int light = telemetryData.light();
         int soilMoistureRaw = telemetryData.soilMoisture();
 
-        // we will make our list of sensor readings
-        List<SensorReading> readings = createSensorReadings(
-                timestamp,
-                temperature,
-                humidity,
-                light,
-                soilMoistureRaw
-        );
+        List<SensorReading> readings = createSensorReadings(timestamp, temperature, humidity, light, soilMoistureRaw);
 
-        //
-        // we map our list of readings to db entities
         List<SensorReadingEntity> entities = readings.stream()
                 .map(reading -> sensorReadingPersistenceMapper.toEntity(reading))
                 .toList();
 
-        sensorReadingRepository.saveAll(entities); // we save the readings to db
+        sensorReadingRepository.saveAll(entities);
 
-        // after saving the readings, we check if watering is needed
-        // this will call ML prediction and publish MQTT command if soil is too dry
         wateringAutomationService.handleWateringIfNeeded(telemetryData);
     }
 
-    // helping method to create the list of sensor readings
     private List<SensorReading> createSensorReadings(
             Instant timestamp,
             double temperature,
@@ -73,9 +57,8 @@ public class SensorReadingServiceImpl implements SensorReadingService {
             int light,
             int soilMoistureRaw) {
 
-        List<SensorReading> readings = new ArrayList<>(); // we create empty list of sensor readings
+        List<SensorReading> readings = new ArrayList<>();
 
-        // and we create and add readings to the list
         readings.add(new SensorReading(temperature, timestamp, 1));
         readings.add(new SensorReading(humidity, timestamp, 4));
         readings.add(new SensorReading(light, timestamp, 2));
@@ -84,13 +67,11 @@ public class SensorReadingServiceImpl implements SensorReadingService {
         return readings;
     }
 
-    // helping method to validate incoming telemetry data
     private void validate(TelemetryData telemetryData) {
         if (telemetryData.setupId() <= 0) {
             throw new IllegalArgumentException("Invalid setup id");
         }
 
-        // sensor id can be null for now because contract allows null until multiple sensors are used
         if (telemetryData.sensorId() != null && telemetryData.sensorId() <= 0) {
             throw new IllegalArgumentException("Invalid sensor id");
         }

@@ -2,7 +2,6 @@ package dk.via.group1.urbanmicrofarm_backend.application.services.plant_service;
 
 import dk.via.group1.urbanmicrofarm_backend.database.entities.PlantEntity;
 import dk.via.group1.urbanmicrofarm_backend.database.repository.PlantRepository;
-
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,7 +19,7 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<PlantEntity> getPlantsBySetup(Long setupId) {
-       return null;
+        return plantRepository.findBySensor_SetupId(setupId.intValue());
     }
 
     @Override
@@ -35,7 +34,6 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public PlantEntity addPlant(PlantEntity plantEntity) {
-
         plantEntity.setDatePlanted(Instant.now());
 
         if (plantEntity.getStatus() == null) {
@@ -47,7 +45,6 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public PlantEntity updatePlant(Long plantId, PlantEntity updatedPlant) {
-
         PlantEntity existingPlant = plantRepository.findById(plantId)
                 .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
 
@@ -60,6 +57,14 @@ public class PlantServiceImpl implements PlantService {
         }
 
         return plantRepository.save(existingPlant);
+    }
+
+    @Override
+    public PlantEntity updatePhoto(Long plantId, String photo) {
+        PlantEntity plant = plantRepository.findById(plantId)
+                .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
+        plant.setPhoto(photo);
+        return plantRepository.save(plant);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package dk.via.group1.urbanmicrofarm_backend.user.controller;
 
 import dk.via.group1.urbanmicrofarm_backend.security.JwtService;
+import dk.via.group1.urbanmicrofarm_backend.security.SecurityConfig;
 import dk.via.group1.urbanmicrofarm_backend.user.dto.*;
 import dk.via.group1.urbanmicrofarm_backend.user.exception.*;
 import dk.via.group1.urbanmicrofarm_backend.user.service.UserService;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * JwtService is mocked so no real JWT secret is required at test time.
  */
 @WebMvcTest(UserController.class)
+@Import(SecurityConfig.class)
 class UserControllerTest {
 
     @Autowired MockMvc mockMvc;

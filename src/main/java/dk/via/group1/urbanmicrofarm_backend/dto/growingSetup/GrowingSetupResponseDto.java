@@ -14,6 +14,7 @@ public class GrowingSetupResponseDto {
     private int id;
     private String location;
     private String status;
+    private int sensorSlots;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -23,5 +24,8 @@ public class GrowingSetupResponseDto {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public int getSensorSlots() { return sensorSlots; }
+    public void setSensorSlots(int sensorSlots) { this.sensorSlots = sensorSlots; }
   }
 }

@@ -6,9 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface PlantRepository extends JpaRepository<PlantEntity, String> {
-//  List<PlantEntity> findBySetupId(long setupId);
-  Optional<PlantEntity> findBySensorId(long sensorId);
-  Optional<PlantEntity> findById(long plantId);
-  void deleteById(long plantId);
+public interface PlantRepository extends JpaRepository<PlantEntity, Long> {
+    Optional<PlantEntity> findBySensorId(long sensorId);
+    List<PlantEntity> findBySensor_SetupId(int setupId);
 }
