@@ -32,6 +32,14 @@ public class SensorReadingQueryServiceImpl implements SensorReadingQueryService 
     }
 
     @Override
+    public Optional<SensorReading> getLatestReading(Long sensorId) {
+
+        return sensorReadingRepository
+                .findFirstBySensorIdOrderByTimestampDesc(Math.toIntExact(sensorId))
+                .map(sensorReadingPersistenceMapper::toDomain);
+    }
+
+    @Override
     public List<SensorReading> getHistoricalReadings(Integer sensorId, Instant from, Instant to) {
         validateSensorId(sensorId);
         Instant effectiveFrom = from != null ? from : Instant.EPOCH;

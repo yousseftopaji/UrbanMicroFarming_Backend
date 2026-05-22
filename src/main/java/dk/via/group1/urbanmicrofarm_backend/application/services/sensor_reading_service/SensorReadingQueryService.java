@@ -10,6 +10,6 @@ import com.google.type.DateTime;
 
 public interface SensorReadingQueryService {
     Optional<SensorReading> getLatestReading(Integer sensorId);
-
+    Optional<SensorReading> getLatestReading(Long sensorId);
     List<SensorReading> getHistoricalReadings(Integer sensorId, Instant from, Instant to);
 }
