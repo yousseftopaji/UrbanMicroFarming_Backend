@@ -17,8 +17,8 @@ public class PredictionEntity {
     @Column(nullable = false)
     private Instant createdAt;
 
-    @Column(nullable = false)
-    private Long plant_id;
+    @Column(name = "plant_id", nullable = false)
+    private Long plantId;
 
     @ManyToOne
     @JoinColumn(name = "plant_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -33,8 +33,8 @@ public class PredictionEntity {
     public Instant getCreatedAt() { return createdAt; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 
-    public Long getPlantId() { return plant_id; }
-    public void setPlantId(Long plantId) { this.plant_id = plantId; }
+    public Long getPlantId() { return plantId; }
+    public void setPlantId(Long plantId) { this.plantId = plantId; }
 
     public PlantEntity getPlant() { return plant; }
     public void setPlant(PlantEntity plant) { this.plant = plant; }

@@ -4,6 +4,7 @@ import dk.via.group1.urbanmicrofarm_backend.application.services.sensor_reading_
 import dk.via.group1.urbanmicrofarm_backend.mapper.apiMapper.SensorReadingApiMapper;
 import dk.via.group1.urbanmicrofarm_backend.dto.SensorReadingHistoryResponseDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.SensorReadingLatestResponseDto;
+import java.util.List;
 
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -47,17 +48,15 @@ public class SensorReadingController {
      * @return Returns a list of sensor readings of sensor with @sensorId, and, if provided, a time range within @from and @to
      */
     @GetMapping("/{sensorId}/readings")
-    public SensorReadingHistoryResponseDto getHistoricalReadings(
+    public List<SensorReadingHistoryResponseDto.SensorReadingHistoryItemDto> getHistoricalReadings(
             @PathVariable Integer sensorId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant to) {
 
-        System.out.println(sensorId);
-
         return sensorReadingApiMapper.toHistoryResponseDto(
                 sensorId,
                 sensorReadingQueryService.getHistoricalReadings(sensorId, from, to)
-        );
+        ).data();
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

@@ -34,9 +34,10 @@ public class SensorReadingQueryServiceImpl implements SensorReadingQueryService 
     @Override
     public List<SensorReading> getHistoricalReadings(Integer sensorId, Instant from, Instant to) {
         validateSensorId(sensorId);
-
+        Instant effectiveFrom = from != null ? from : Instant.EPOCH;
+        Instant effectiveTo   = to   != null ? to   : Instant.now();
         return sensorReadingRepository
-                .findBySensorIdAndTimeRange(sensorId, from, to)
+                .findBySensorIdAndTimeRange(sensorId, effectiveFrom, effectiveTo)
                 .stream()
                 .map(sensorReadingPersistenceMapper::toDomain)
                 .toList();

@@ -9,6 +9,8 @@ public class PlantResponseDto {
     private String type;
     private String datePlanted;
     private String status;
+    private String photo;
+    private String health;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -30,4 +32,10 @@ public class PlantResponseDto {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getPhoto() { return photo; }
+    public void setPhoto(String photo) { this.photo = photo; }
+
+    public String getHealth() { return health; }
+    public void setHealth(String health) { this.health = health; }
 }

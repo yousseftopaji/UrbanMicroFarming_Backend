@@ -19,7 +19,7 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<PlantEntity> getPlantsBySetup(Long setupId) {
-        return null;
+        return plantRepository.findBySensor_SetupId(setupId.intValue());
     }
 
     @Override
@@ -57,6 +57,14 @@ public class PlantServiceImpl implements PlantService {
         }
 
         return plantRepository.save(existingPlant);
+    }
+
+    @Override
+    public PlantEntity updatePhoto(Long plantId, String photo) {
+        PlantEntity plant = plantRepository.findById(plantId)
+                .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
+        plant.setPhoto(photo);
+        return plantRepository.save(plant);
     }
 
     @Override

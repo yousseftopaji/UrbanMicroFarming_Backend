@@ -34,6 +34,21 @@ public class AlertEntity {
     @JoinColumn(name = "watering_event_id", referencedColumnName = "id", insertable = false, updatable = false)
     private WateringEventEntity wateringEvent;
 
+    @Column(nullable = true)
+    private Long userId;
+
+    @Column(nullable = true)
+    private String severity;
+
+    @Column(nullable = true)
+    private Long setupId;
+
+    @Column(nullable = true)
+    private Long plantId;
+
+    @Column(nullable = true)
+    private Long sensorId;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -60,4 +75,19 @@ public class AlertEntity {
 
     public WateringEventEntity getWateringEvent() { return wateringEvent; }
     public void setWateringEvent(WateringEventEntity wateringEvent) { this.wateringEvent = wateringEvent; }
+
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+
+    public String getSeverity() { return severity; }
+    public void setSeverity(String severity) { this.severity = severity; }
+
+    public Long getSetupId() { return setupId; }
+    public void setSetupId(Long setupId) { this.setupId = setupId; }
+
+    public Long getPlantId() { return plantId; }
+    public void setPlantId(Long plantId) { this.plantId = plantId; }
+
+    public Long getSensorId() { return sensorId; }
+    public void setSensorId(Long sensorId) { this.sensorId = sensorId; }
 }

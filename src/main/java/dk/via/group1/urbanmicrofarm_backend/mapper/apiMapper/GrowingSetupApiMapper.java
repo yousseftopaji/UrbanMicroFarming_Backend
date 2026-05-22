@@ -14,6 +14,7 @@ public class GrowingSetupApiMapper {
     details.setId(domain.getSetupId());
     details.setLocation(domain.getLocation());
     details.setStatus(domain.getStatus() != null ? domain.getStatus() : "ACTIVE");
+    details.setSensorSlots(domain.getSensors() != null ? domain.getSensors().size() : 0);
 
     return new GrowingSetupResponseDto(details);
   }

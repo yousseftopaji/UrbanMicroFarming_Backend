@@ -22,6 +22,7 @@ public class PlantApiMapper {
         }
 
         dto.setStatus(plantEntity.getStatus());
+        dto.setPhoto(plantEntity.getPhoto());
 
         return dto;
     }

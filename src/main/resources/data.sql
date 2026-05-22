@@ -10,6 +10,9 @@ INSERT INTO urban_micro_farm_app.users (email, name, password_hash, theme, creat
 -- Insert Growing Setup with correct user_id mapping
 INSERT INTO urban_micro_farm_app.growing_setup(location, serial_number, user_id) VALUES ('Rooftop Garden', 'SN123456', 1);
 
+-- Insert Actuator for growing setup 1
+INSERT INTO urban_micro_farm_app.actuator (type, status, setup_id) VALUES ('water_pump', 'ACTIVE', 1);
+
 -- Insert Sensors with correct sensor_id mapping
 INSERT INTO urban_micro_farm_app.sensor (unit, setup_id, sensor_type_name) VALUES ('°C', 1, 'Temperature');
 

@@ -17,8 +17,8 @@ public class SensorReadingEntity {
     @Column(nullable = false)
     private Instant timestamp;
 
-    @Column(nullable = false)
-    private Long sensor_id;
+    @Column(name = "sensor_id", nullable = false)
+    private Long sensorId;
 
     @ManyToOne
     @JoinColumn(name = "sensor_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -36,8 +36,8 @@ public class SensorReadingEntity {
     public Instant getTimestamp() { return timestamp; }
     public void setTimestamp(Instant timestamp) { this.timestamp = timestamp; }
 
-    public Long getSensorId() { return sensor_id; }
-    public void setSensorId(Long sensorId) { this.sensor_id = sensorId; }
+    public Long getSensorId() { return sensorId; }
+    public void setSensorId(Long sensorId) { this.sensorId = sensorId; }
 
     public SensorEntity getSensor() { return sensor; }
     public void setSensor(SensorEntity sensor) { this.sensor = sensor; }
