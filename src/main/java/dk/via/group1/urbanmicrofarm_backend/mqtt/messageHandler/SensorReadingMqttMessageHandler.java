@@ -30,7 +30,7 @@ public class SensorReadingMqttMessageHandler implements MqttMessageHandler {
 
   @Override
   public void handle(String topic, String payload) {
-    if (topic.endsWith("/cmd")) {
+    if (topic != null && topic.endsWith("/cmd")) {
       return;
     }
 
