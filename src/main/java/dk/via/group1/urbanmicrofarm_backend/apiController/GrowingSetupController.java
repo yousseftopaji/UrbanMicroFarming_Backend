@@ -103,7 +103,7 @@ public class GrowingSetupController {
               .findFirstBySensorIdOrderByTimestampDesc(s.getId().intValue())
               .map(r -> r.getTimestamp().isAfter(oneHourAgo))
               .orElse(false);
-          return new SensorResponseDto(s.getId(), hasRecentReading ? "Active" : "No data");
+          return new SensorResponseDto(s.getId(), s.getSensorType().getName(), hasRecentReading ? "Active" : "No data");
         })
         .collect(Collectors.toList());
   }
