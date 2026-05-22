@@ -72,9 +72,6 @@ public class WateringServiceImpl implements WateringService {
 
         List<SensorEntity> sensorsList = sensorRepository.findBySetupId(setupId);
 
-        System.out.println("\nSENSOR LIST");
-        System.out.println(sensorsList.toString());
-
         SensorEntity soilMoistureSensor = sensorsList.stream()
                 .filter(s -> "Soil_Moisture".equalsIgnoreCase(s.getSensorTypeName()))
                 .findFirst()
@@ -89,10 +86,7 @@ public class WateringServiceImpl implements WateringService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Light sensor not found"));
 
         SensorEntity temperatureSensor = sensorsList.stream()
-                .filter(s -> {
-                    System.out.println(s.getSensorTypeName());
-                    return "Temperature".equals(s.getSensorTypeName());
-                })
+                .filter(s ->"Temperature".equals(s.getSensorTypeName()))
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Temperature sensor not found"));
 
