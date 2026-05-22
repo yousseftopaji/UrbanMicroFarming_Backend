@@ -72,23 +72,31 @@ public class WateringServiceImpl implements WateringService {
 
         List<SensorEntity> sensorsList = sensorRepository.findBySetupId(setupId);
 
+        System.out.println("\nSENSOR LIST");
+        System.out.println(sensorsList.toString());
+
         SensorEntity soilMoistureSensor = sensorsList.stream()
-                .filter(s -> "soil_moisture".equalsIgnoreCase(s.getSensorTypeName()))
+                .filter(s -> "Soil_Moisture".equalsIgnoreCase(s.getSensorTypeName()))
                 .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Temperature sensor not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Soil moisture sensor not found"));
         SensorEntity humiditySensor = sensorsList.stream()
-                .filter(s -> "humidity".equals(s.getSensorTypeName()))
+                .filter(s -> "Humidity".equals(s.getSensorTypeName()))
                 .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Temperature sensor not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Humidity sensor not found"));
         SensorEntity ligthSensor = sensorsList.stream()
-                .filter(s -> "light".equals(s.getSensorTypeName()))
+                .filter(s -> "Light".equals(s.getSensorTypeName()))
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Light sensor not found"));
+
         SensorEntity temperatureSensor = sensorsList.stream()
-                .filter(s -> "temperature".equals(s.getSensorTypeName()))
+                .filter(s -> {
+                    System.out.println(s.getSensorTypeName());
+                    return "Temperature".equals(s.getSensorTypeName());
+                })
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Temperature sensor not found"));
 
+//        get all latest readings to sent them to ML
         SensorReading soilMoisture = sensorReadingQueryService.getLatestReading(soilMoistureSensor.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sensor not found for plant"));
         SensorReading humidity = sensorReadingQueryService.getLatestReading(humiditySensor.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sensor not found for plant"));
         SensorReading light = sensorReadingQueryService.getLatestReading(ligthSensor.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sensor not found for plant"));
@@ -115,11 +123,12 @@ public class WateringServiceImpl implements WateringService {
                 response.wateringAmount()
         );
 
-//        WateringEventEntity event = new WateringEventEntity();
-//        event.setActuatorId(actuator.getId());
-//        event.setWaterUsed_mL((double) DEFAULT_MANUAL_WATERING_AMOUNT_ML);
-//        event.setMode("manual");
-//        wateringEventRepository.save(event);
+//        save the watering event as manual
+        WateringEventEntity event = new WateringEventEntity();
+        event.setActuatorId(actuator.getId());
+        event.setWaterUsed_mL((double) response.wateringAmount());
+        event.setMode("manual");
+        wateringEventRepository.save(event);
     }
 
     @Override
