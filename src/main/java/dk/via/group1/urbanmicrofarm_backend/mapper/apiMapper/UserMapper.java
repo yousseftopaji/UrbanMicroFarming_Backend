@@ -1,9 +1,9 @@
-package dk.via.group1.urbanmicrofarm_backend.user.mapper;
+package dk.via.group1.urbanmicrofarm_backend.mapper.apiMapper;
 
 import dk.via.group1.urbanmicrofarm_backend.database.entities.UserEntity;
-import dk.via.group1.urbanmicrofarm_backend.user.dto.RegisterRequest;
-import dk.via.group1.urbanmicrofarm_backend.user.dto.UserDto;
-import dk.via.group1.urbanmicrofarm_backend.user.model.Theme;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.RegisterRequest;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.UserDto;
+import dk.via.group1.urbanmicrofarm_backend.model.Theme;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

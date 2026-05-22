@@ -1,9 +1,10 @@
 package dk.via.group1.urbanmicrofarm_backend.user.mapper;
 
 import dk.via.group1.urbanmicrofarm_backend.database.entities.UserEntity;
-import dk.via.group1.urbanmicrofarm_backend.user.dto.RegisterRequest;
-import dk.via.group1.urbanmicrofarm_backend.user.dto.UserDto;
-import dk.via.group1.urbanmicrofarm_backend.user.model.Theme;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.RegisterRequest;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.UserDto;
+import dk.via.group1.urbanmicrofarm_backend.mapper.apiMapper.UserMapper;
+import dk.via.group1.urbanmicrofarm_backend.model.Theme;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

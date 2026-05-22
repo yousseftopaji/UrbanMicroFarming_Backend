@@ -1,6 +1,6 @@
 package dk.via.group1.urbanmicrofarm_backend.database.entities;
 
-import dk.via.group1.urbanmicrofarm_backend.user.model.Theme;
+import dk.via.group1.urbanmicrofarm_backend.model.Theme;
 import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.List;

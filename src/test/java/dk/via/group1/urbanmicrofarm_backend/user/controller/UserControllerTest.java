@@ -1,10 +1,16 @@
 package dk.via.group1.urbanmicrofarm_backend.user.controller;
 
+import dk.via.group1.urbanmicrofarm_backend.apiController.UserController;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.LoginResponse;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.MessageResponse;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.UserDto;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.EmailAlreadyExistsException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.InvalidCredentialsException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.UnauthorizedOperationException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.UserNotFoundException;
 import dk.via.group1.urbanmicrofarm_backend.security.JwtService;
 import dk.via.group1.urbanmicrofarm_backend.security.SecurityConfig;
-import dk.via.group1.urbanmicrofarm_backend.user.dto.*;
-import dk.via.group1.urbanmicrofarm_backend.user.exception.*;
-import dk.via.group1.urbanmicrofarm_backend.user.service.UserService;
+import dk.via.group1.urbanmicrofarm_backend.application.services.user_service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

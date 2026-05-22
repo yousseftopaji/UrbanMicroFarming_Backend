@@ -1,11 +1,14 @@
-package dk.via.group1.urbanmicrofarm_backend.user.service;
+package dk.via.group1.urbanmicrofarm_backend.application.services.user_service;
 
 import dk.via.group1.urbanmicrofarm_backend.database.entities.UserEntity;
 import dk.via.group1.urbanmicrofarm_backend.database.repository.UserRepository;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.*;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.EmailAlreadyExistsException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.InvalidCredentialsException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.UnauthorizedOperationException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.UserNotFoundException;
 import dk.via.group1.urbanmicrofarm_backend.security.JwtService;
-import dk.via.group1.urbanmicrofarm_backend.user.dto.*;
-import dk.via.group1.urbanmicrofarm_backend.user.exception.*;
-import dk.via.group1.urbanmicrofarm_backend.user.mapper.UserMapper;
+import dk.via.group1.urbanmicrofarm_backend.mapper.apiMapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;

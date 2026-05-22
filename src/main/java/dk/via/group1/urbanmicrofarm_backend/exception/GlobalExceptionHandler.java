@@ -1,7 +1,10 @@
 package dk.via.group1.urbanmicrofarm_backend.exception;
 
-import dk.via.group1.urbanmicrofarm_backend.user.dto.ErrorResponse;
-import dk.via.group1.urbanmicrofarm_backend.user.exception.*;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.ErrorResponse;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.EmailAlreadyExistsException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.InvalidCredentialsException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.UnauthorizedOperationException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
