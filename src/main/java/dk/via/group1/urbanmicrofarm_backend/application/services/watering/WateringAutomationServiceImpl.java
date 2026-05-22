@@ -1,9 +1,12 @@
 package dk.via.group1.urbanmicrofarm_backend.application.services.watering;
 
+import dk.via.group1.urbanmicrofarm_backend.database.entities.WateringEventEntity;
+import dk.via.group1.urbanmicrofarm_backend.database.repository.WateringEventRepository;
 import dk.via.group1.urbanmicrofarm_backend.dto.TelemetryData;
 import dk.via.group1.urbanmicrofarm_backend.dto.mlDto.WaterPredictionRequestDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.mlDto.WaterPredictionResponseDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.mqttDto.ActuatorCommandDto;
+import dk.via.group1.urbanmicrofarm_backend.mapper.dbMapper.WateringEventDbMapper;
 import dk.via.group1.urbanmicrofarm_backend.mapper.mlMapper.WaterPredictionMapper;
 import dk.via.group1.urbanmicrofarm_backend.mlClient.MLPredictionClient;
 import dk.via.group1.urbanmicrofarm_backend.mqtt.publisher.MqttPublisher;
@@ -19,16 +22,20 @@ public class WateringAutomationServiceImpl implements WateringAutomationService 
     private final MLPredictionClient mlPredictionClient;
     private final MqttPublisher mqttPublisher;
     private final ObjectMapper objectMapper;
+    private final WateringEventRepository wateringEventRepository;
+    private final WateringEventDbMapper wateringEventDbMapper;
 
     public WateringAutomationServiceImpl(
             WaterPredictionMapper waterPredictionMapper,
             MLPredictionClient mlPredictionClient,
             MqttPublisher mqttPublisher,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper, WateringEventRepository wateringEventRepository, WateringEventDbMapper wateringEventDbMapper) {
         this.waterPredictionMapper = waterPredictionMapper;
         this.mlPredictionClient = mlPredictionClient;
         this.mqttPublisher = mqttPublisher;
         this.objectMapper = objectMapper;
+        this.wateringEventRepository = wateringEventRepository;
+        this.wateringEventDbMapper = wateringEventDbMapper;
     }
 
     @Override
@@ -55,6 +62,10 @@ public class WateringAutomationServiceImpl implements WateringAutomationService 
 
         // we call ML serverless function to get predicted watering amount
         WaterPredictionResponseDto response = mlPredictionClient.predictWater(request);
+
+        WateringEventEntity prediction = wateringEventDbMapper.toAutomaticEntity(response, 1L);
+
+        wateringEventRepository.save(prediction);
 
         // we send the predicted watering amount back to IoT through MQTT
 
