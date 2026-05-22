@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class SensorReadingPersistenceMapper {
 
-    public SensorReadingEntity toEntity(SensorReading sensorReading, long sensorId) {
+    public SensorReadingEntity toEntity(SensorReading sensorReading) {
         SensorReadingEntity entity = new SensorReadingEntity();
         entity.setValue(sensorReading.getValue());
         entity.setTimestamp(sensorReading.getTimestamp());
-        entity.setSensorId(sensorId);
+        entity.setSensorId(sensorReading.getSensorId());
         return entity;
     }
 
