@@ -53,7 +53,7 @@ public class PlantController {
                     sensorReadingRepository
                             .findFirstBySensorIdOrderByTimestampDesc(plant.getSensorId().intValue())
                             .ifPresentOrElse(
-                                    r -> dto.setHealth(r.getValue() < moistureMin ? "water" : "ok"),
+                                    r -> dto.setHealth(r.getValue() < moistureMin ? "stressed" : "healthy"),
                                     () -> dto.setHealth("unknown")
                             );
                     return dto;
