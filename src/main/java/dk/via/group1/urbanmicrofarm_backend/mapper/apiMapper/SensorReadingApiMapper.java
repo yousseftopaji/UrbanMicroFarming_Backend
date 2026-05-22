@@ -5,29 +5,31 @@ import dk.via.group1.urbanmicrofarm_backend.dto.SensorReadingHistoryResponseDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.SensorReadingLatestResponseDto;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneOffset;
 import java.util.List;
 
-@Component public class SensorReadingApiMapper
-{
+@Component
+public class SensorReadingApiMapper {
 
-  public SensorReadingLatestResponseDto toLatestResponseDto(
-      SensorReading sensorReading)
-  {
+    public SensorReadingLatestResponseDto toLatestResponseDto(SensorReading sensorReading) {
+        return new SensorReadingLatestResponseDto(
+                (int) sensorReading.getId(),
+                sensorReading.getValue(),
+                sensorReading.getTimestamp()
+        );
+    }
 
-    return new SensorReadingLatestResponseDto((int) sensorReading.getId(),
-        sensorReading.getValue(), sensorReading.getTimestamp());
-  }
+    public SensorReadingHistoryResponseDto toHistoryResponseDto(
+            Integer sensorId,
+            List<SensorReading> readings) {
 
-  public SensorReadingHistoryResponseDto toHistoryResponseDto(Integer sensorId,
-      List<SensorReading> readings)
-  {
+        List<SensorReadingHistoryResponseDto.SensorReadingHistoryItemDto> data =
+                readings.stream()
+                        .map(reading -> new SensorReadingHistoryResponseDto.SensorReadingHistoryItemDto(
+                                reading.getValue(),
+                                reading.getTimestamp()
+                        ))
+                        .toList();
 
-    List<SensorReadingHistoryResponseDto.SensorReadingHistoryItemDto> data = readings.stream()
-        .map(
-            reading -> new SensorReadingHistoryResponseDto.SensorReadingHistoryItemDto(
-                reading.getValue(), reading.getTimestamp())).toList();
-
-    return new SensorReadingHistoryResponseDto(sensorId, data);
-  }
+        return new SensorReadingHistoryResponseDto(sensorId, data);
+    }
 }

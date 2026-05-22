@@ -1,43 +1,53 @@
 package dk.via.group1.urbanmicrofarm_backend.database.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "watering_event", schema = "urban_micro_farm_app")
 public class WateringEventEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private Double waterUsed_mL;
-  private String mode;
+    private Double waterUsed_mL;
+    private String mode;
 
-  @Column(nullable = false)
-  private Long actuator_id;
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
 
-  @ManyToOne
-  @JoinColumn(name = "actuator_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private ActuatorEntity actuator;
+    @Column(name = "actuator_id", nullable = false)
+    private Long actuatorId;
 
-  @OneToOne(mappedBy = "wateringEvent")
-  private AlertEntity alert;
+    @ManyToOne
+    @JoinColumn(name = "actuator_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private ActuatorEntity actuator;
 
-  public Long getId() { return id; }
-  public void setId(Long id) { this.id = id; }
+    @OneToOne(mappedBy = "wateringEvent")
+    private AlertEntity alert;
 
-  public Double getWaterUsed_mL() { return waterUsed_mL; }
-  public void setWaterUsed_mL(Double waterUsed_mL) { this.waterUsed_mL = waterUsed_mL; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-  public String getMode() { return mode; }
-  public void setMode(String mode) { this.mode = mode; }
+    public Double getWaterUsed_mL() { return waterUsed_mL; }
+    public void setWaterUsed_mL(Double waterUsed_mL) { this.waterUsed_mL = waterUsed_mL; }
 
-  public Long getActuatorId() { return actuator_id; }
-  public void setActuatorId(Long actuatorId) { this.actuator_id = actuatorId; }
+    public String getMode() { return mode; }
+    public void setMode(String mode) { this.mode = mode; }
 
-  public ActuatorEntity getActuator() { return actuator; }
-  public void setActuator(ActuatorEntity actuator) { this.actuator = actuator; }
+    public Long getActuatorId() { return actuatorId; }
+    public void setActuatorId(Long actuatorId) { this.actuatorId = actuatorId; }
 
-  public AlertEntity getAlert() { return alert; }
-  public void setAlert(AlertEntity alert) { this.alert = alert; }
+    public ActuatorEntity getActuator() { return actuator; }
+    public void setActuator(ActuatorEntity actuator) { this.actuator = actuator; }
+
+    public AlertEntity getAlert() { return alert; }
+    public void setAlert(AlertEntity alert) { this.alert = alert; }
+
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 }

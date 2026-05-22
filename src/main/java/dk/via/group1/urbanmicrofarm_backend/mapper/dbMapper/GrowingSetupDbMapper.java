@@ -9,34 +9,34 @@ import java.util.ArrayList;
 @Component
 public class GrowingSetupDbMapper {
 
-  public GrowingSetup toDomain(GrowingSetupEntity entity) {
-    if (entity == null) {
-      return null;
+    public GrowingSetup toDomain(GrowingSetupEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        GrowingSetup setup = new GrowingSetup(
+                entity.getSetupId(),
+                entity.getSerialNumber(),
+                entity.getLocation(),
+                new ArrayList<>()
+        );
+
+        setup.setStatus("ACTIVE");
+
+        return setup;
     }
 
-    GrowingSetup setup = new GrowingSetup(
-        entity.getSetupId(),
-        entity.getSerialNumber(),
-        entity.getLocation(),
-        new ArrayList<>()
-    );
+    public GrowingSetupEntity toEntity(GrowingSetup domain) {
+        if (domain == null) {
+            return null;
+        }
 
-    setup.setStatus("ACTIVE");
+        GrowingSetupEntity entity = new GrowingSetupEntity();
 
-    return setup;
-  }
+        entity.setSetupId(domain.getSetupId());
+        entity.setSerialNumber(domain.getSerialNumber());
+        entity.setLocation(domain.getLocation());
 
-  public GrowingSetupEntity toEntity(GrowingSetup domain) {
-    if (domain == null) {
-      return null;
+        return entity;
     }
-
-    GrowingSetupEntity entity = new GrowingSetupEntity();
-
-    entity.setSetupId(domain.getSetupId());
-    entity.setSerialNumber(domain.getSerialNumber());
-    entity.setLocation(domain.getLocation());
-
-    return entity;
-  }
 }

@@ -2,6 +2,8 @@ package dk.via.group1.urbanmicrofarm_backend.exception;
 
 import dk.via.group1.urbanmicrofarm_backend.user.dto.ErrorResponse;
 import dk.via.group1.urbanmicrofarm_backend.user.exception.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -14,6 +16,8 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(UserNotFoundException ex) {
@@ -47,6 +51,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleMessageNotReadable(HttpMessageNotReadableException ex) {
         return error(HttpStatus.BAD_REQUEST, "VALIDATION_ERROR", "Invalid request body");
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleUnexpected(Exception ex) {
+        log.error("Unhandled exception in controller", ex);
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", ex.getMessage());
     }
 
     private ResponseEntity<ErrorResponse> error(HttpStatus status, String code, String message) {

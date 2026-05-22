@@ -7,35 +7,35 @@ import java.time.Instant;
 @Table(name = "prediction", schema = "urban_micro_farm_app")
 public class PredictionEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(nullable = false)
-  private Double predictedValue;
+    @Column(nullable = false)
+    private Double predictedValue;
 
-  @Column(nullable = false)
-  private Instant createdAt;
+    @Column(nullable = false)
+    private Instant createdAt;
 
-  @Column(nullable = false)
-  private Long plant_id;
+    @Column(name = "plant_id", nullable = false)
+    private Long plantId;
 
-  @ManyToOne
-  @JoinColumn(name = "plant_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private PlantEntity plant;
+    @ManyToOne
+    @JoinColumn(name = "plant_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private PlantEntity plant;
 
-  public Long getId() { return id; }
-  public void setId(Long id) { this.id = id; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-  public Double getPredictedValue() { return predictedValue; }
-  public void setPredictedValue(Double predictedValue) { this.predictedValue = predictedValue; }
+    public Double getPredictedValue() { return predictedValue; }
+    public void setPredictedValue(Double predictedValue) { this.predictedValue = predictedValue; }
 
-  public Instant getCreatedAt() { return createdAt; }
-  public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 
-  public Long getPlantId() { return plant_id; }
-  public void setPlantId(Long plantId) { this.plant_id = plantId; }
+    public Long getPlantId() { return plantId; }
+    public void setPlantId(Long plantId) { this.plantId = plantId; }
 
-  public PlantEntity getPlant() { return plant; }
-  public void setPlant(PlantEntity plant) { this.plant = plant; }
+    public PlantEntity getPlant() { return plant; }
+    public void setPlant(PlantEntity plant) { this.plant = plant; }
 }
