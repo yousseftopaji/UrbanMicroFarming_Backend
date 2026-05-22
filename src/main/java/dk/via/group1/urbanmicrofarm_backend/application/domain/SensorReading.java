@@ -40,6 +40,11 @@ public class SensorReading
   {
     return timestamp;
   }
+
+  public long getSensorId()
+  {
+    return sensorId;
+  }
 }
 
 

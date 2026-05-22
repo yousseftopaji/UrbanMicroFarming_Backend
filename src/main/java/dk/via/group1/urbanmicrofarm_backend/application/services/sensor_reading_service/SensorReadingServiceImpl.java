@@ -42,7 +42,6 @@ public class SensorReadingServiceImpl implements SensorReadingService {
         double humidity = telemetryData.humidity() / 10.0;
         int light = telemetryData.light();
         int soilMoistureRaw = telemetryData.soilMoisture();
-        long sensorId = telemetryData.sensorId();
 
         // we will make our list of sensor readings
         List<SensorReading> readings = createSensorReadings(
@@ -56,7 +55,7 @@ public class SensorReadingServiceImpl implements SensorReadingService {
         //
         // we map our list of readings to db entities
         List<SensorReadingEntity> entities = readings.stream()
-                .map(reading -> sensorReadingPersistenceMapper.toEntity(reading, sensorId))
+                .map(reading -> sensorReadingPersistenceMapper.toEntity(reading))
                 .toList();
 
         sensorReadingRepository.saveAll(entities); // we save the readings to db
