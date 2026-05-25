@@ -53,7 +53,7 @@ public class PlantController {
                     sensorReadingRepository
                             .findFirstBySensorIdOrderByTimestampDesc(plant.getSensorId().intValue())
                             .ifPresentOrElse(
-                                    r -> dto.setHealth(r.getValue() < moistureMin ? "water" : "ok"),
+                                    r -> dto.setHealth(r.getValue() < moistureMin ? "stressed" : "healthy"),
                                     () -> dto.setHealth("unknown")
                             );
                     return dto;
@@ -65,7 +65,22 @@ public class PlantController {
     public PlantResponseDto getPlant(@PathVariable Long plantId) {
         PlantEntity plantEntity = plantService.getPlant(plantId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found"));
-        return plantApiMapper.toResponseDto(plantEntity);
+
+        PlantResponseDto dto = plantApiMapper.toResponseDto(plantEntity);
+
+        int setupId = plantEntity.getSensor().getSetupId();
+        double moistureMin = setupThresholdRepository.findBySetupId(setupId)
+                .map(t -> t.getMoistureMin())
+                .orElse(200.0);
+
+        sensorReadingRepository
+                .findFirstBySensorIdOrderByTimestampDesc(plantEntity.getSensorId().intValue())
+                .ifPresentOrElse(
+                        r -> dto.setHealth(r.getValue() < moistureMin ? "stressed" : "healthy"),
+                        () -> dto.setHealth("unknown")
+                );
+
+        return dto;
     }
 
     @GetMapping("/sensors/{sensorId}/plant")

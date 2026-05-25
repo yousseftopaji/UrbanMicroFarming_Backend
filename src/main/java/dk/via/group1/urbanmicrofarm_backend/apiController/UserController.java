@@ -1,7 +1,7 @@
-package dk.via.group1.urbanmicrofarm_backend.user.controller;
+package dk.via.group1.urbanmicrofarm_backend.apiController;
 
-import dk.via.group1.urbanmicrofarm_backend.user.dto.*;
-import dk.via.group1.urbanmicrofarm_backend.user.service.UserService;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.*;
+import dk.via.group1.urbanmicrofarm_backend.application.services.user_service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

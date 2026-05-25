@@ -58,4 +58,5 @@ public class GrowingSetupEntity {
 
     public List<SensorEntity> getSensors() { return sensors; }
     public void setSensors(List<SensorEntity> sensors) { this.sensors = sensors; }
+
 }

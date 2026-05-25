@@ -1,4 +1,4 @@
-package dk.via.group1.urbanmicrofarm_backend.user.dto;
+package dk.via.group1.urbanmicrofarm_backend.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
