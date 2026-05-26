@@ -91,10 +91,13 @@ public class WateringServiceImpl implements WateringService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Temperature sensor not found"));
 
 //        get all latest readings to sent them to ML
-        SensorReading soilMoisture = sensorReadingQueryService.getLatestReading(soilMoistureSensor.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sensor not found for plant"));
+        SensorReading rawSoilMoisture = sensorReadingQueryService.getLatestReading(soilMoistureSensor.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sensor not found for plant"));
         SensorReading humidity = sensorReadingQueryService.getLatestReading(humiditySensor.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sensor not found for plant"));
         SensorReading light = sensorReadingQueryService.getLatestReading(ligthSensor.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sensor not found for plant"));
         SensorReading temperature = sensorReadingQueryService.getLatestReading(temperatureSensor.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sensor not found for plant"));
+
+        double soilMoisture = (rawSoilMoisture.getValue()/ 1023.0) * 100.0;
+
 
         ActuatorEntity actuator = actuatorRepository.findFirstBySetupId(setupId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No actuator found for setup " + setupId));
@@ -105,7 +108,7 @@ public class WateringServiceImpl implements WateringService {
                 temperature.getValue(),
                 humidity.getValue(),
                 (int)light.getValue(),
-                soilMoisture.getValue()
+                soilMoisture
         );
 
         // we call ML serverless function to get predicted watering amount
