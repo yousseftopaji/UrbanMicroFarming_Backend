@@ -40,13 +40,6 @@ public class SensorReadingController {
                 ));
     }
 
-    /**
-     * @param sensorId - Required. Indicates sensor id of which readings are looked for.
-     * @param from - Optional parameter. Indicates the beginning of time range of sensor readings.
-     * @param to - Optional parameter. Indicates the end of time range of sensor readings.
-     *
-     * @return Returns a list of sensor readings of sensor with @sensorId, and, if provided, a time range within @from and @to
-     */
     @GetMapping("/{sensorId}/readings")
     public List<SensorReadingHistoryResponseDto.SensorReadingHistoryItemDto> getHistoricalReadings(
             @PathVariable Integer sensorId,

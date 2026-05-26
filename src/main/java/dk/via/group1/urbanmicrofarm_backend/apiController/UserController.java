@@ -1,6 +1,13 @@
 package dk.via.group1.urbanmicrofarm_backend.apiController;
 
-import dk.via.group1.urbanmicrofarm_backend.dto.user.*;
+import dk.via.group1.urbanmicrofarm_backend.dto.MessageResponseDto;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.ChangeEmailRequest;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.ChangePasswordRequest;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.LoginRequest;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.LoginResponse;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.RegisterRequest;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.SetThemeRequest;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.UpdateNameRequest;
 import dk.via.group1.urbanmicrofarm_backend.application.services.user_service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<MessageResponseDto> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(request));
     }
 
@@ -31,7 +38,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<MessageResponse> deleteUser(
+    public ResponseEntity<MessageResponseDto> deleteUser(
             @PathVariable Long userId, Authentication authentication) {
         return ResponseEntity.ok(userService.deleteUser(userId, uid(authentication)));
     }
@@ -45,7 +52,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/password")
-    public ResponseEntity<MessageResponse> changePassword(
+    public ResponseEntity<MessageResponseDto> changePassword(
             @PathVariable Long userId,
             @Valid @RequestBody ChangePasswordRequest request,
             Authentication authentication) {

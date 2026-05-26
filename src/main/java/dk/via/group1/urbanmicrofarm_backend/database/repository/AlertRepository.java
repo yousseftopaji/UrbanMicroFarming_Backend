@@ -10,13 +10,16 @@ import java.util.List;
 
 public interface AlertRepository extends JpaRepository<AlertEntity, Long> {
 
-    List<AlertEntity> findByUserIdOrderByTimestampDesc(Long userId);
-
     @Query("SELECT a FROM AlertEntity a WHERE a.userId = :userId " +
-           "AND a.timestamp >= :from AND a.timestamp <= :to " +
+           "AND (:status IS NULL OR a.status = :status) " +
+           "AND (:setupId IS NULL OR a.setupId = :setupId) " +
+           "AND a.timestamp >= :from " +
+           "AND a.timestamp <= :to " +
            "ORDER BY a.timestamp DESC")
-    List<AlertEntity> findByUserIdAndTimeRange(
+    List<AlertEntity> findByUserIdWithFilters(
             @Param("userId") Long userId,
+            @Param("status") String status,
+            @Param("setupId") Long setupId,
             @Param("from") Instant from,
             @Param("to") Instant to);
 }

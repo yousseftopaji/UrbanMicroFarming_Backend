@@ -3,6 +3,7 @@ package dk.via.group1.urbanmicrofarm_backend.user.service;
 import dk.via.group1.urbanmicrofarm_backend.application.services.user_service.UserService;
 import dk.via.group1.urbanmicrofarm_backend.database.entities.UserEntity;
 import dk.via.group1.urbanmicrofarm_backend.database.repository.UserRepository;
+import dk.via.group1.urbanmicrofarm_backend.dto.MessageResponseDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.user.*;
 import dk.via.group1.urbanmicrofarm_backend.exception.user.EmailAlreadyExistsException;
 import dk.via.group1.urbanmicrofarm_backend.exception.user.InvalidCredentialsException;
@@ -44,7 +45,7 @@ class UserServiceTest {
         when(userRepository.existsByEmail("alice@example.com")).thenReturn(false);
         when(userMapper.toEntity(req)).thenReturn(new UserEntity());
 
-        MessageResponse response = userService.register(req);
+        MessageResponseDto response = userService.register(req);
 
         assertThat(response.message()).isEqualTo("User registered successfully");
         verify(userRepository).save(any(UserEntity.class));
@@ -104,7 +105,7 @@ class UserServiceTest {
         UserEntity user = buildUser(1L, "alice@example.com", "hash");
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        MessageResponse response = userService.deleteUser(1L, 1L);
+        MessageResponseDto response = userService.deleteUser(1L, 1L);
 
         assertThat(response.message()).isEqualTo("Account deleted successfully");
         verify(userRepository).delete(user);
@@ -164,7 +165,7 @@ class UserServiceTest {
         when(passwordEncoder.encode("newPass123")).thenReturn("newHash");
         when(userRepository.save(user)).thenReturn(user);
 
-        MessageResponse response = userService.changePassword(1L, 1L,
+        MessageResponseDto response = userService.changePassword(1L, 1L,
             new ChangePasswordRequest("oldPass", "newPass123"));
 
         assertThat(response.message()).isEqualTo("Password changed successfully");

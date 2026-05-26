@@ -2,7 +2,7 @@ package dk.via.group1.urbanmicrofarm_backend.user.controller;
 
 import dk.via.group1.urbanmicrofarm_backend.apiController.UserController;
 import dk.via.group1.urbanmicrofarm_backend.dto.user.LoginResponse;
-import dk.via.group1.urbanmicrofarm_backend.dto.user.MessageResponse;
+import dk.via.group1.urbanmicrofarm_backend.dto.MessageResponseDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.user.UserDto;
 import dk.via.group1.urbanmicrofarm_backend.exception.user.EmailAlreadyExistsException;
 import dk.via.group1.urbanmicrofarm_backend.exception.user.InvalidCredentialsException;
@@ -54,7 +54,7 @@ class UserControllerTest {
 
     @Test
     void register_validBody_returns201WithMessage() throws Exception {
-        when(userService.register(any())).thenReturn(new MessageResponse("User registered successfully"));
+        when(userService.register(any())).thenReturn(new MessageResponseDto("User registered successfully"));
 
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -134,7 +134,7 @@ class UserControllerTest {
 
     @Test
     void deleteUser_authenticated_returns200() throws Exception {
-        when(userService.deleteUser(1L, 1L)).thenReturn(new MessageResponse("Account deleted successfully"));
+        when(userService.deleteUser(1L, 1L)).thenReturn(new MessageResponseDto("Account deleted successfully"));
 
         mockMvc.perform(delete("/api/users/1").header("Authorization", BEARER))
             .andExpect(status().isOk())
@@ -207,7 +207,7 @@ class UserControllerTest {
     @Test
     void changePassword_authenticated_returns200() throws Exception {
         when(userService.changePassword(eq(1L), eq(1L), any()))
-            .thenReturn(new MessageResponse("Password changed successfully"));
+            .thenReturn(new MessageResponseDto("Password changed successfully"));
 
         mockMvc.perform(put("/api/users/1/password")
                 .header("Authorization", BEARER)

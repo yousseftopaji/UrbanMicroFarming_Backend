@@ -26,16 +26,14 @@ public class AlertController {
     @GetMapping("/api/users/{userId}/alerts")
     public List<AlertResponseDto> getAlerts(
             @PathVariable Long userId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Long setupId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant to) {
 
-        List<AlertEntity> alerts = (from != null || to != null)
-                ? alertRepository.findByUserIdAndTimeRange(
-                        userId,
-                        from != null ? from : Instant.EPOCH,
-                        to != null ? to : Instant.now())
-                : alertRepository.findByUserIdOrderByTimestampDesc(userId);
-
+        Instant effectiveFrom = from != null ? from : Instant.EPOCH;
+        Instant effectiveTo = to != null ? to : Instant.ofEpochSecond(253402300799L);
+        List<AlertEntity> alerts = alertRepository.findByUserIdWithFilters(userId, status, setupId, effectiveFrom, effectiveTo);
         return alerts.stream().map(this::toDto).collect(Collectors.toList());
     }
 

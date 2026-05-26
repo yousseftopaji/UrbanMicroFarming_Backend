@@ -30,7 +30,7 @@ public class UserMapper {
     }
 
     public UserDto toLoginDto(UserEntity user) {
-        return new UserDto(user.getId(), null, user.getEmail(), lower(user.getTheme()));
+        return new UserDto(user.getId(), user.getName(), user.getEmail(), lower(user.getTheme()));
     }
 
     public UserDto toNameDto(UserEntity user) {

@@ -18,7 +18,6 @@ public class DefaultMqttTelemetryDataParser implements MqttTelemetryDataParser {
         if (payload == null || payload.isBlank()) {
             throw new IllegalArgumentException("MQTT payload must not be blank");
         }
-        System.out.println("Parsing MQTT payload: " + payload);
         try {
             return objectMapper.readValue(payload, MqttTelemetryDataDto.class);
         } catch (Exception e) {

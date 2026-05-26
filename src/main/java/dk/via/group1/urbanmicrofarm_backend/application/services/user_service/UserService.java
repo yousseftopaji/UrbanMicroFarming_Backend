@@ -2,6 +2,7 @@ package dk.via.group1.urbanmicrofarm_backend.application.services.user_service;
 
 import dk.via.group1.urbanmicrofarm_backend.database.entities.UserEntity;
 import dk.via.group1.urbanmicrofarm_backend.database.repository.UserRepository;
+import dk.via.group1.urbanmicrofarm_backend.dto.MessageResponseDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.user.*;
 import dk.via.group1.urbanmicrofarm_backend.exception.user.EmailAlreadyExistsException;
 import dk.via.group1.urbanmicrofarm_backend.exception.user.InvalidCredentialsException;
@@ -32,13 +33,13 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public MessageResponse register(RegisterRequest request) {
+    public MessageResponseDto register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new EmailAlreadyExistsException("Email already in use: " + request.email());
         }
         userRepository.save(userMapper.toEntity(request));
         log.info("User registered: email={}", request.email());
-        return new MessageResponse("User registered successfully");
+        return new MessageResponseDto("User registered successfully");
     }
 
     public LoginResponse login(LoginRequest request) {
@@ -58,13 +59,13 @@ public class UserService {
         return new LoginResponse(token, userMapper.toLoginDto(user));
     }
 
-    public MessageResponse deleteUser(Long userId, Long authenticatedUserId) {
+    public MessageResponseDto deleteUser(Long userId, Long authenticatedUserId) {
         checkOwnership(userId, authenticatedUserId);
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
         userRepository.delete(user);
         log.info("Account deleted: userId={}", userId);
-        return new MessageResponse("Account deleted successfully");
+        return new MessageResponseDto("Account deleted successfully");
     }
 
     public UserDto updateName(Long userId, Long authenticatedUserId, UpdateNameRequest request) {
@@ -75,7 +76,7 @@ public class UserService {
         return userMapper.toNameDto(userRepository.save(user));
     }
 
-    public MessageResponse changePassword(Long userId, Long authenticatedUserId, ChangePasswordRequest request) {
+    public MessageResponseDto changePassword(Long userId, Long authenticatedUserId, ChangePasswordRequest request) {
         checkOwnership(userId, authenticatedUserId);
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
@@ -88,7 +89,7 @@ public class UserService {
         user.setPasswordHash(passwordEncoder.encode(request.newPassword()));
         userRepository.save(user);
         log.info("Password changed: userId={}", userId);
-        return new MessageResponse("Password changed successfully");
+        return new MessageResponseDto("Password changed successfully");
     }
 
     public UserDto changeEmail(Long userId, Long authenticatedUserId, ChangeEmailRequest request) {

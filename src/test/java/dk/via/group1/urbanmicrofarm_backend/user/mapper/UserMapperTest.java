@@ -72,9 +72,9 @@ class UserMapperTest {
     // ── toLoginDto ────────────────────────────────────────────
 
     @Test
-    void toLoginDto_excludesName() {
+    void toLoginDto_includesName() {
         UserDto dto = mapper.toLoginDto(buildUser());
-        assertThat(dto.name()).isNull();
+        assertThat(dto.name()).isEqualTo("Alice");
         assertThat(dto.id()).isEqualTo(1L);
         assertThat(dto.email()).isEqualTo("alice@example.com");
         assertThat(dto.theme()).isEqualTo("system");

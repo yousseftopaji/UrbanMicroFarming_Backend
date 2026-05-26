@@ -10,6 +10,7 @@ import dk.via.group1.urbanmicrofarm_backend.dto.CreatePlantRequestDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.MessageResponseDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.PlantResponseDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.PredictionResponseDto;
+import dk.via.group1.urbanmicrofarm_backend.dto.UpdatePlantRequestDto;
 import dk.via.group1.urbanmicrofarm_backend.mapper.apiMapper.PlantApiMapper;
 
 import org.springframework.http.HttpStatus;
@@ -98,15 +99,15 @@ public class PlantController {
     }
 
     @PatchMapping("/plants/{plantId}")
-    public PlantResponseDto updatePlant(@PathVariable Long plantId, @RequestBody CreatePlantRequestDto dto) {
-        PlantEntity updatedPlant = plantApiMapper.fromCreateRequestDto(dto);
+    public PlantResponseDto updatePlant(@PathVariable Long plantId, @RequestBody UpdatePlantRequestDto dto) {
+        PlantEntity updatedPlant = plantApiMapper.fromUpdateRequestDto(dto);
         return plantApiMapper.toResponseDto(plantService.updatePlant(plantId, updatedPlant));
     }
 
     @DeleteMapping("/plants/{plantId}")
-    public String removePlant(@PathVariable Long plantId) {
+    public MessageResponseDto removePlant(@PathVariable Long plantId) {
         plantService.removePlant(plantId);
-        return "Plant removed successfully";
+        return new MessageResponseDto("Plant removed successfully");
     }
 
     @PutMapping("/plants/{plantId}/photo")
