@@ -1,0 +1,128 @@
+package dk.via.group1.urbanmicrofarm_backend.application.services.user_service;
+
+import dk.via.group1.urbanmicrofarm_backend.database.entities.UserEntity;
+import dk.via.group1.urbanmicrofarm_backend.database.repository.UserRepository;
+import dk.via.group1.urbanmicrofarm_backend.dto.MessageResponseDto;
+import dk.via.group1.urbanmicrofarm_backend.dto.user.*;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.EmailAlreadyExistsException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.InvalidCredentialsException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.UnauthorizedOperationException;
+import dk.via.group1.urbanmicrofarm_backend.exception.user.UserNotFoundException;
+import dk.via.group1.urbanmicrofarm_backend.security.JwtService;
+import dk.via.group1.urbanmicrofarm_backend.mapper.apiMapper.UserMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final UserMapper userMapper;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                       JwtService jwtService, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.userMapper = userMapper;
+    }
+
+    public MessageResponseDto register(RegisterRequest request) {
+        if (userRepository.existsByEmail(request.email())) {
+            throw new EmailAlreadyExistsException("Email already in use: " + request.email());
+        }
+        userRepository.save(userMapper.toEntity(request));
+        log.info("User registered: email={}", request.email());
+        return new MessageResponseDto("User registered successfully");
+    }
+
+    public LoginResponse login(LoginRequest request) {
+        UserEntity user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> {
+                    log.warn("Login failed - email not found: {}", request.email());
+                    return new InvalidCredentialsException("Invalid email or password");
+                });
+
+        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+            log.warn("Login failed - wrong password: userId={}", user.getId());
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
+        String token = jwtService.generateToken(user.getId());
+        log.info("Login successful: userId={}", user.getId());
+        return new LoginResponse(token, userMapper.toLoginDto(user));
+    }
+
+    public MessageResponseDto deleteUser(Long userId, Long authenticatedUserId) {
+        checkOwnership(userId, authenticatedUserId);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        userRepository.delete(user);
+        log.info("Account deleted: userId={}", userId);
+        return new MessageResponseDto("Account deleted successfully");
+    }
+
+    public UserDto updateName(Long userId, Long authenticatedUserId, UpdateNameRequest request) {
+        checkOwnership(userId, authenticatedUserId);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        user.setName(request.name());
+        return userMapper.toNameDto(userRepository.save(user));
+    }
+
+    public MessageResponseDto changePassword(Long userId, Long authenticatedUserId, ChangePasswordRequest request) {
+        checkOwnership(userId, authenticatedUserId);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+
+        if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
+            log.warn("Password change failed - wrong current password: userId={}", userId);
+            throw new InvalidCredentialsException("Current password is incorrect");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
+        log.info("Password changed: userId={}", userId);
+        return new MessageResponseDto("Password changed successfully");
+    }
+
+    public UserDto changeEmail(Long userId, Long authenticatedUserId, ChangeEmailRequest request) {
+        checkOwnership(userId, authenticatedUserId);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+
+        if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
+            log.warn("Email change failed - wrong current password: userId={}", userId);
+            throw new InvalidCredentialsException("Current password is incorrect");
+        }
+
+        if (userRepository.existsByEmail(request.newEmail())) {
+            throw new EmailAlreadyExistsException("Email already in use: " + request.newEmail());
+        }
+
+        user.setEmail(request.newEmail());
+        log.info("Email changed: userId={}", userId);
+        return userMapper.toEmailDto(userRepository.save(user));
+    }
+
+    public UserDto setTheme(Long userId, Long authenticatedUserId, SetThemeRequest request) {
+        checkOwnership(userId, authenticatedUserId);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        user.setTheme(request.theme());
+        return userMapper.toThemeDto(userRepository.save(user));
+    }
+
+    private void checkOwnership(Long userId, Long authenticatedUserId) {
+        if (!userId.equals(authenticatedUserId)) {
+            throw new UnauthorizedOperationException(
+                    "Cannot perform operation on another user's account");
+        }
+    }
+}

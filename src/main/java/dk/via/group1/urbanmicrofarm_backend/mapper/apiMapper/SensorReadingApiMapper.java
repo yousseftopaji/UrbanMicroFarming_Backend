@@ -5,42 +5,31 @@ import dk.via.group1.urbanmicrofarm_backend.dto.SensorReadingHistoryResponseDto;
 import dk.via.group1.urbanmicrofarm_backend.dto.SensorReadingLatestResponseDto;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneOffset;
 import java.util.List;
 
 @Component
 public class SensorReadingApiMapper {
 
-    public SensorReadingLatestResponseDto toLatestResponseDto(
-            Integer setupId,
-            SensorReading sensorReading) {
-
+    public SensorReadingLatestResponseDto toLatestResponseDto(SensorReading sensorReading) {
         return new SensorReadingLatestResponseDto(
-                setupId,
-                sensorReading.getSensor().getSensorId(),
-                sensorReading.getSensor().getType().name(),
+                (int) sensorReading.getId(),
                 sensorReading.getValue(),
-                sensorReading.getTimestamp().toInstant(ZoneOffset.UTC)
+                sensorReading.getTimestamp()
         );
     }
 
     public SensorReadingHistoryResponseDto toHistoryResponseDto(
-            Integer setupId,
-            String sensorType,
+            Integer sensorId,
             List<SensorReading> readings) {
 
         List<SensorReadingHistoryResponseDto.SensorReadingHistoryItemDto> data =
                 readings.stream()
                         .map(reading -> new SensorReadingHistoryResponseDto.SensorReadingHistoryItemDto(
                                 reading.getValue(),
-                                reading.getTimestamp().toInstant(ZoneOffset.UTC)
+                                reading.getTimestamp()
                         ))
                         .toList();
 
-        return new SensorReadingHistoryResponseDto(
-                setupId,
-                sensorType.toUpperCase(),
-                data
-        );
+        return new SensorReadingHistoryResponseDto(sensorId, data);
     }
 }

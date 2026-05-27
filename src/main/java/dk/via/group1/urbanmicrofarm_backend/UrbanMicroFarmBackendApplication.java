@@ -6,12 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-public class UrbanMicroFarmBackendApplication
-{
+public class UrbanMicroFarmBackendApplication {
 
-  public static void main(String[] args)
-  {
-    SpringApplication.run(UrbanMicroFarmBackendApplication.class, args);
-  }
-
+    public static void main(String[] args) {
+        SpringApplication.run(UrbanMicroFarmBackendApplication.class, args);
+    }
 }

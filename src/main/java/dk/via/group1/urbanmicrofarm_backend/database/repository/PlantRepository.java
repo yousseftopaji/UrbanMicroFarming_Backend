@@ -4,8 +4,9 @@ import dk.via.group1.urbanmicrofarm_backend.database.entities.PlantEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface PlantRepository extends JpaRepository<PlantEntity, String> {
-
-  List<PlantEntity> findBySetupId(Long setupId);
+public interface PlantRepository extends JpaRepository<PlantEntity, Long> {
+    Optional<PlantEntity> findBySensorId(long sensorId);
+    List<PlantEntity> findBySensor_SetupId(int setupId);
 }
